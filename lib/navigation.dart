@@ -1,9 +1,9 @@
-import 'dart:async';
 import 'package:ceremony/classes/user.dart';
 import 'package:flutter/material.dart';
 import 'package:ceremony/screens/profile.dart';
 import 'package:ceremony/screens/home.dart';
 import 'package:iconsax/iconsax.dart';
+import 'classes/security.dart';
 
 class Navigate extends StatefulWidget {
   final int index;
@@ -33,15 +33,13 @@ class _NavigateState extends State<Navigate> {
         });
       }
     });
-    Timer.periodic(
-        const Duration(minutes: 1),
-        (Timer t) => user.valid().then((value) {
-              if (mounted) {
-                setState(() {
-                  valid = value;
-                });
-              }
-            }));
+    TimeNow().getStamp().then((value) {
+      if (mounted) {
+        setState(() {
+          stamp = value;
+        });
+      }
+    });
     super.initState();
   }
 
