@@ -2,7 +2,6 @@ import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/sheets.dart';
 import 'package:ceremony/classes/user.dart';
 import 'package:ceremony/classes/widgets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
@@ -50,6 +49,11 @@ class _ProfilePageState extends State<ProfilePage> {
             "Duszpasterstwo Służby Liturgicznej\nArchidiecezji Krakowskiej",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+        const SliverToBoxAdapter(
+          child: SizedBox(
+            height: 10,
           ),
         ),
         SliverToBoxAdapter(
@@ -194,7 +198,7 @@ class _ProfilePageState extends State<ProfilePage> {
               Expanded(
                 child: Container(),
               ),
-              Container(
+              SizedBox(
                 width: 200,
                 height: 50,
                 child: OutlinedButton(
