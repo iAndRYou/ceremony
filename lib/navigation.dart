@@ -10,7 +10,8 @@ class Navigate extends StatefulWidget {
   final User user;
   final bool valid;
   final String stamp;
-  const Navigate(this.index, this.user, this.valid, this.stamp, {Key? key}) : super(key: key);
+  const Navigate(this.index, this.user, this.valid, this.stamp, {Key? key})
+      : super(key: key);
 
   @override
   // ignore: no_logic_in_create_state
@@ -62,7 +63,7 @@ class _NavigateState extends State<Navigate> {
               Iconsax.personalcard,
               color: Theme.of(context).iconTheme.color,
             ),
-            label: "Home",
+            label: "e-Legitymacja",
             selectedIcon: Icon(
               Iconsax.personalcard5,
               color: Theme.of(context).iconTheme.color,
@@ -70,12 +71,12 @@ class _NavigateState extends State<Navigate> {
           ),
           NavigationDestination(
             icon: Icon(
-              Iconsax.more,
+              Iconsax.more_square,
               color: Theme.of(context).iconTheme.color,
             ),
-            label: "Profile",
+            label: "Profil",
             selectedIcon: Icon(
-              Iconsax.more5,
+              Iconsax.more_square5,
               color: Theme.of(context).iconTheme.color,
             ),
           ),
