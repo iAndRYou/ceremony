@@ -59,8 +59,6 @@ class _ProfilePageState extends State<ProfilePage> {
         SliverToBoxAdapter(
           child: Divider(
             height: 3,
-            indent: 15,
-            endIndent: 15,
             color: Theme.of(context).dividerColor,
           ),
         ),
@@ -80,8 +78,6 @@ class _ProfilePageState extends State<ProfilePage> {
         SliverToBoxAdapter(
           child: Divider(
             height: 3,
-            indent: 15,
-            endIndent: 15,
             color: Theme.of(context).dividerColor,
           ),
         ),
@@ -99,23 +95,8 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         SliverToBoxAdapter(
-          child: ListTile(
-            dense: true,
-            title: Text(
-              user.deanery().toUpperCase(),
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            subtitle: Text(
-              "Dekanat",
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-        ),
-        SliverToBoxAdapter(
           child: Divider(
             height: 3,
-            indent: 15,
-            endIndent: 15,
             color: Theme.of(context).dividerColor,
           ),
         ),
@@ -143,7 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 showChangePinBar(context, user);
               },
               child: const Icon(
-                Ionicons.pencil_outline,
+                Iconsax.edit,
                 size: 30,
                 color: Colors.black87,
               ),
@@ -153,8 +134,6 @@ class _ProfilePageState extends State<ProfilePage> {
         SliverToBoxAdapter(
           child: Divider(
             height: 3,
-            indent: 15,
-            endIndent: 15,
             color: Theme.of(context).dividerColor,
           ),
         ),
@@ -180,11 +159,54 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               onPressed: () async {},
               child: const Icon(
-                Iconsax.wifi_square,
+                Iconsax.mirroring_screen,
                 size: 30,
                 color: Colors.black87,
               ),
             ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Divider(
+            height: 3,
+            color: Theme.of(context).dividerColor,
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: ListTile(
+            dense: true,
+            title: Text(
+              "Opcje",
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            subtitle: Text(
+              "Menu",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            trailing: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                primary: Colors.white,
+                side: const BorderSide(
+                  color: Colors.white,
+                ),
+                elevation: 0,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1500)),
+              ),
+              onPressed: () async {
+                showChangePinBar(context, user);
+              },
+              child: const Icon(
+                Iconsax.arrow_right_3,
+                size: 30,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Divider(
+            height: 3,
+            color: Theme.of(context).dividerColor,
           ),
         ),
         const SliverToBoxAdapter(
