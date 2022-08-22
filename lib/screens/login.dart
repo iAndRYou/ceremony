@@ -39,7 +39,8 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 50),
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
                   fixedSize: const Size(200, 50),
                   alignment: Alignment.center,
                   elevation: 0,
@@ -83,7 +84,8 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.white,
                   ),
                   elevation: 0,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1500)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(1500)),
                 ),
                 onPressed: () async {
                   await Cache().setToken(token);
@@ -91,16 +93,24 @@ class _LoginPageState extends State<LoginPage> {
                   if (availability != NFCAvailability.available) {
                     showErrorAlert('NFC', 'Brak dostępu do modułu NFC');
                   } else {
-                    var tag = await FlutterNfcKit.poll(timeout: const Duration(minutes: 2));
-                    if (tag.type == NFCTagType.mifare_classic && tag.ndefWritable!) {
+                    var tag = await FlutterNfcKit.poll(
+                        timeout: const Duration(minutes: 2));
+                    if (tag.type == NFCTagType.mifare_classic &&
+                        tag.ndefWritable!) {
                       print('got id card');
-                      await FlutterNfcKit.writeNDEFRecords([ndef.UriRecord.fromString(token), ndef.SignatureRecord(hashType: 'SHA-256', signatureType: 'DSA-1024', signatureURI: encrypt(tag.id))]);
+                      await FlutterNfcKit.writeNDEFRecords([
+                        ndef.UriRecord.fromString(token),
+                        ndef.SignatureRecord(
+                            hashType: 'SHA-256',
+                            signatureType: 'DSA-1024',
+                            signatureURI: encrypt(tag.id))
+                      ]);
                       print('written id card');
                     }
                   }
                 },
                 child: const Icon(
-                  Iconsax.wifi_square,
+                  Iconsax.mirroring_screen,
                   size: 50,
                   color: Colors.black26,
                 ),

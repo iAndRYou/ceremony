@@ -10,23 +10,23 @@ environment:
 
 
 dependencies:
-  google_fonts:
-  encrypt:
-  ntp:
-  foil:
-  get:
-  hexcolor:
-  flutter_secure_storage:
-  flutter_nfc_kit:
-  ndef:
-  pin_code_fields:
+  google_fonts: ^3.0.1
+  encrypt: ^5.0.1
+  ntp: ^2.0.0
+  foil: ^0.9.0+1
+  get: ^4.6.5
+  hexcolor: ^2.0.7
+  flutter_secure_storage: ^5.1.2
+  flutter_nfc_kit: ^3.3.1
+  ndef: ^0.3.1
+  pin_code_fields: ^7.4.0
   ionicons: ^0.2.1
   iconsax: ^0.0.8
-  intl:
+  intl: ^0.17.0
   flutter:
     sdk: flutter
 
-  cupertino_icons:
+  cupertino_icons: ^1.0.5
 
 dev_dependencies:
   flutter_test:
