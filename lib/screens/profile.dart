@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/sheets.dart';
 import 'package:ceremony/classes/user.dart';
@@ -8,7 +7,6 @@ import 'package:ceremony/screens/options.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:ionicons/ionicons.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
