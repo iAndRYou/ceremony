@@ -94,7 +94,8 @@ showPinBar(context, user) async {
                 }
               }
             },
-            keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
+            keyboardType: const TextInputType.numberWithOptions(
+                signed: false, decimal: false),
             useHapticFeedback: true,
             autoFocus: true,
             autoUnfocus: true,
@@ -165,17 +166,19 @@ _showFirstPinBar2(context, User user, pin) async {
                   showCompleteAlert('Zalogowano', 'Wprowadzono dane pomyślnie');
                   await Future.delayed(const Duration(milliseconds: 2000));
                   Get.offAll(
-                    Navigate(0, user, valid, stamp),
+                    () => Navigate(0, user, valid, stamp),
                     transition: Transition.fadeIn,
                     curve: Curves.ease,
                     duration: const Duration(milliseconds: 1500),
                   );
                 } else {
-                  showErrorAlert('Wprowadzono różne kody PIN', 'Spróbuj ponownie');
+                  showErrorAlert(
+                      'Wprowadzono różne kody PIN', 'Spróbuj ponownie');
                 }
               }
             },
-            keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
+            keyboardType: const TextInputType.numberWithOptions(
+                signed: false, decimal: false),
             useHapticFeedback: true,
             autoFocus: true,
             autoUnfocus: true,
@@ -240,7 +243,8 @@ showFirstPinBar(context, user) async {
                 await _showFirstPinBar2(context, user, value);
               }
             },
-            keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
+            keyboardType: const TextInputType.numberWithOptions(
+                signed: false, decimal: false),
             useHapticFeedback: true,
             autoFocus: true,
             autoUnfocus: true,
@@ -309,7 +313,8 @@ showChangePinBar(context, user) async {
                 }
               }
             },
-            keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
+            keyboardType: const TextInputType.numberWithOptions(
+                signed: false, decimal: false),
             useHapticFeedback: true,
             autoFocus: true,
             autoUnfocus: true,
@@ -380,7 +385,7 @@ showLogoutBar(context, user) async {
                   showCompleteAlert('Wylogowano', 'Usunięto dane pomyślnie');
                   await Future.delayed(const Duration(milliseconds: 2000));
                   Get.offAll(
-                    const LoginPage(),
+                    () => const LoginPage(),
                     transition: Transition.fadeIn,
                     curve: Curves.ease,
                     duration: const Duration(milliseconds: 1500),
@@ -390,7 +395,8 @@ showLogoutBar(context, user) async {
                 }
               }
             },
-            keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
+            keyboardType: const TextInputType.numberWithOptions(
+                signed: false, decimal: false),
             useHapticFeedback: true,
             autoFocus: true,
             autoUnfocus: true,

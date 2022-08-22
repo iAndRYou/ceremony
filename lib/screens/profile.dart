@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/sheets.dart';
 import 'package:ceremony/classes/user.dart';
 import 'package:ceremony/classes/widgets.dart';
+import 'package:ceremony/screens/options.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -59,8 +63,6 @@ class _ProfilePageState extends State<ProfilePage> {
         SliverToBoxAdapter(
           child: Divider(
             height: 3,
-            indent: 15,
-            endIndent: 15,
             color: Theme.of(context).dividerColor,
           ),
         ),
@@ -80,8 +82,6 @@ class _ProfilePageState extends State<ProfilePage> {
         SliverToBoxAdapter(
           child: Divider(
             height: 3,
-            indent: 15,
-            endIndent: 15,
             color: Theme.of(context).dividerColor,
           ),
         ),
@@ -96,6 +96,12 @@ class _ProfilePageState extends State<ProfilePage> {
               "Parafia",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Divider(
+            height: 3,
+            color: Theme.of(context).dividerColor,
           ),
         ),
         SliverToBoxAdapter(
@@ -114,8 +120,6 @@ class _ProfilePageState extends State<ProfilePage> {
         SliverToBoxAdapter(
           child: Divider(
             height: 3,
-            indent: 15,
-            endIndent: 15,
             color: Theme.of(context).dividerColor,
           ),
         ),
@@ -137,13 +141,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: Colors.white,
                 ),
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1500)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(1500)),
               ),
               onPressed: () async {
                 showChangePinBar(context, user);
               },
               child: const Icon(
-                Ionicons.pencil_outline,
+                Iconsax.edit,
                 size: 30,
                 color: Colors.black87,
               ),
@@ -153,8 +158,6 @@ class _ProfilePageState extends State<ProfilePage> {
         SliverToBoxAdapter(
           child: Divider(
             height: 3,
-            indent: 15,
-            endIndent: 15,
             color: Theme.of(context).dividerColor,
           ),
         ),
@@ -162,11 +165,11 @@ class _ProfilePageState extends State<ProfilePage> {
           child: ListTile(
             dense: true,
             title: Text(
-              "Aktualizuj dane",
+              "Opcje",
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             subtitle: Text(
-              "Przyłóż kartę",
+              "Menu",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             trailing: OutlinedButton(
@@ -176,15 +179,37 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: Colors.white,
                 ),
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1500)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(1500)),
               ),
-              onPressed: () async {},
+              onPressed: () {
+                if (Platform.isIOS) {
+                  Get.to(() => const OptionsPage(),
+                      transition: Transition.cupertino,
+                      curve: Curves.ease,
+                      opaque: true,
+                      duration: const Duration(milliseconds: 700));
+                }
+                if (Platform.isAndroid) {
+                  Get.to(() => const OptionsPage(),
+                      transition: Transition.cupertino,
+                      curve: Curves.ease,
+                      opaque: true,
+                      duration: const Duration(milliseconds: 700));
+                }
+              },
               child: const Icon(
-                Iconsax.wifi_square,
+                Iconsax.arrow_right_3,
                 size: 30,
                 color: Colors.black87,
               ),
             ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Divider(
+            height: 3,
+            color: Theme.of(context).dividerColor,
           ),
         ),
         const SliverToBoxAdapter(
@@ -204,7 +229,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
                     fixedSize: const Size(200, 50),
                     alignment: Alignment.center,
                     elevation: 0,
