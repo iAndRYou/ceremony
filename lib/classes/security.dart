@@ -16,7 +16,6 @@ List<String> keys = [
   'VmYq3t6w9z*C&F)J@NcRfUjWnZr4u7x!',
 ];
 
-
 String encrypt(String id) {
   int index = Random.secure().nextInt(10);
   final key = Key.fromUtf8(keys[index]);
@@ -25,8 +24,8 @@ String encrypt(String id) {
 }
 
 String decrypt(String id) {
-  int index = int.parse(id.substring(id.length-1));
-  id = id.replaceRange(id.length-1, id.length, '');
+  int index = int.parse(id.substring(id.length - 1));
+  id = id.replaceRange(id.length - 1, id.length, '');
   final key = Key.fromUtf8(keys[index]);
   final iv = IV.fromLength(16);
   String decrypted = Encrypter(AES(key)).decrypt64(id, iv: iv);
@@ -34,7 +33,6 @@ String decrypt(String id) {
 }
 
 class TimeNow {
-
   Future<String> getStamp() async {
     var now = await NTP.now();
     return "${DateFormat('dd.MM.yyyy').format(now)}   ${DateFormat('HH:mm').format(now)}";
