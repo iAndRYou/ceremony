@@ -15,9 +15,10 @@ class IDClipper extends CustomClipper<Path> {
     var secondControlPoint = Offset(size.width - (size.width / 4), size.height);
     var secondEndPoint = Offset(size.width, size.height - 20);
 
-    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy, firstEndPoint.dx, firstEndPoint.dy);
-    path.quadraticBezierTo(
-        secondControlPoint.dx, secondControlPoint.dy, secondEndPoint.dx, secondEndPoint.dy);
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstEndPoint.dx, firstEndPoint.dy);
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
+        secondEndPoint.dx, secondEndPoint.dy);
 
     path.lineTo(size.width, size.height - 20);
     path.lineTo(size.width, 0);
@@ -174,7 +175,8 @@ class _DocumentState extends State<Document> {
         Container(
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15), topRight: Radius.circular(15)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black26,
@@ -189,24 +191,24 @@ class _DocumentState extends State<Document> {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: <Color>[
-                  const Color(0xff1e4e82).withOpacity(0.7),
-                  const Color(0xff1e4e82).withOpacity(0.7),
-                  const Color(0xff1e4e82).withOpacity(0.7),
-                  const Color(0xff1e4e82).withOpacity(0.7),
-                  const Color(0xff1e4e82).withOpacity(0.7),
-                  const Color(0xff045587).withOpacity(0.7),
-                  const Color(0xff005d8b).withOpacity(0.7),
-                  const Color(0xff00648e).withOpacity(0.7),
-                  const Color(0xff006a8f).withOpacity(0.7),
-                  const Color(0xff007190).withOpacity(0.7),
-                  const Color(0xff00778f).withOpacity(0.7),
-                  const Color(0xff007d8e).withOpacity(0.7),
-                  const Color(0xff00838c).withOpacity(0.7),
+                  const Color(0xff1e4e82).withOpacity(0.8),
+                  const Color(0xff1e4e82).withOpacity(0.8),
+                  const Color(0xff1e4e82).withOpacity(0.8),
+                  const Color(0xff1e4e82).withOpacity(0.8),
+                  const Color(0xff1e4e82).withOpacity(0.8),
+                  const Color(0xff045587).withOpacity(0.8),
+                  const Color(0xff005d8b).withOpacity(0.8),
+                  const Color(0xff00648e).withOpacity(0.8),
+                  const Color(0xff006a8f).withOpacity(0.8),
+                  const Color(0xff007190).withOpacity(0.8),
+                  const Color(0xff00778f).withOpacity(0.8),
+                  const Color(0xff007d8e).withOpacity(0.8),
+                  const Color(0xff00838c).withOpacity(0.8),
                 ],
                 tileMode: TileMode.repeated,
               ),
-              borderRadius:
-                  const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15), topRight: Radius.circular(15)),
             ),
             child: Stack(
               children: [
@@ -405,8 +407,9 @@ class _DocumentState extends State<Document> {
                       alignment: Alignment.topLeft,
                       decoration: const BoxDecoration(
                         color: Colors.white,
-                        borderRadius:
-                            BorderRadius.only(topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15)),
                       ),
                       child: SizedBox(
                         height: 200,
@@ -448,7 +451,8 @@ class _DocumentState extends State<Document> {
                                     tileMode: TileMode.repeated,
                                   ),
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
                                 ),
                               ),
                             ),
@@ -460,7 +464,8 @@ class _DocumentState extends State<Document> {
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
                                 ),
                               ),
                             ),
@@ -499,7 +504,8 @@ class _DocumentState extends State<Document> {
                                     tileMode: TileMode.repeated,
                                   ),
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
                                 ),
                               ),
                             ),
@@ -511,7 +517,8 @@ class _DocumentState extends State<Document> {
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
                                 ),
                               ),
                             ),
@@ -550,7 +557,8 @@ class _DocumentState extends State<Document> {
                                     tileMode: TileMode.repeated,
                                   ),
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
                                 ),
                               ),
                             ),
@@ -562,7 +570,8 @@ class _DocumentState extends State<Document> {
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
                                 ),
                               ),
                             ),
@@ -601,7 +610,8 @@ class _DocumentState extends State<Document> {
                                     tileMode: TileMode.repeated,
                                   ),
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
                                 ),
                               ),
                             ),
@@ -613,7 +623,8 @@ class _DocumentState extends State<Document> {
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
                                 ),
                               ),
                             ),
@@ -652,7 +663,8 @@ class _DocumentState extends State<Document> {
                                     tileMode: TileMode.repeated,
                                   ),
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
                                 ),
                               ),
                             ),
@@ -664,7 +676,8 @@ class _DocumentState extends State<Document> {
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15)),
                                 ),
                               ),
                             ),
@@ -789,7 +802,8 @@ class _DocumentState extends State<Document> {
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
             borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15)),
             boxShadow: const [
               BoxShadow(
                 color: Colors.black26,
@@ -801,73 +815,76 @@ class _DocumentState extends State<Document> {
           ),
           child: Row(
             children: [
-              valid ? Padding(
-                padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                child: Icon(
-                  Iconsax.tick_square,
-                  color: Colors.green.withOpacity(0.8),
-                  size: 60,
-                ),
-              ) :
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                child: Icon(
-                  Iconsax.close_square,
-                  color: Colors.red.withOpacity(0.8),
-                  size: 60,
-                ),
-              ),
-              valid ? Expanded(
-                child: RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: "Dokument ważny",
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                          color: Colors.green.withOpacity(0.8),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
+              valid
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: Icon(
+                        Iconsax.tick_square,
+                        color: Colors.green.withOpacity(0.8),
+                        size: 60,
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: Icon(
+                        Iconsax.close_square,
+                        color: Colors.red.withOpacity(0.8),
+                        size: 60,
                       ),
                     ),
-                    TextSpan(
-                      text: " do dnia ${user.exdate!}",
-                      style: GoogleFonts.lato(
-                        textStyle: const TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
+              valid
+                  ? Expanded(
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: "Dokument ważny",
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                color: Colors.green.withOpacity(0.8),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          TextSpan(
+                            text: " do dnia ${user.exdate!}",
+                            style: GoogleFonts.lato(
+                              textStyle: const TextStyle(
+                                color: Colors.black54,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ]),
+                      ),
+                    )
+                  : Expanded(
+                      child: RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: "Dokument nieważny",
+                            style: GoogleFonts.lato(
+                              textStyle: TextStyle(
+                                color: Colors.red.withOpacity(0.8),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          TextSpan(
+                            text: " od dnia ${user.exdate!}",
+                            style: GoogleFonts.lato(
+                              textStyle: const TextStyle(
+                                color: Colors.black54,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ]),
                       ),
                     ),
-                  ]),
-                ),
-              ) : Expanded(
-                child: RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                      text: "Dokument nieważny",
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                          color: Colors.red.withOpacity(0.8),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    TextSpan(
-                      text: " od dnia ${user.exdate!}",
-                      style: GoogleFonts.lato(
-                        textStyle: const TextStyle(
-                          color: Colors.black54,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ]),
-                ),
-              ),
             ],
           ),
         )
