@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                 child: DutyData(user),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                padding: const EdgeInsets.fromLTRB(10, 5, 10, 15),
                 child: DutyDataExtended(user),
               ),
             ],

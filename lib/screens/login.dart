@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
               Expanded(
                 child: Container(),
               ),
-              const HoloDSL(200, 300),
+              const DSL(200, 300),
               const SizedBox(height: 50),
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
@@ -115,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.black26,
                 ),
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 50),
             ],
           ),
         ),
