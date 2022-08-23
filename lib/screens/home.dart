@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       slivers: [
         SliverAppBar(
           floating: false,
-          pinned: false,
+          pinned: true,
           centerTitle: true,
           title: Text(
             "e-Legitymacja",
