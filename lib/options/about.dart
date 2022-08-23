@@ -53,8 +53,21 @@ class _AboutPageState extends State<AboutPage> {
               borderRadius: BorderRadius.circular(25.0))),
       pages: [
         PageViewModel(
-          title: "Skanuj Legitymacje",
-          body: "Dzięki aplikacji",
+          title: "e-Legitymacja",
+          body:
+              "Zaloguj się, a dane twojej legitymacji oraz informacje o twojej posłudze zostaną zebrane w jednym miejscu - na twoim telefonie. Okazanie e-legitymacji w aplikacji jest równoprawne okazaniu fizycznego dokumentu. Tylko w aplikacji sprawdzisz, czy dokument jest ważny.",
+          image: Center(
+            child: Icon(
+              Iconsax.personalcard,
+              size: 140,
+              color: HexColor('1e4e82'),
+            ),
+          ),
+        ),
+        PageViewModel(
+          title: "Skanuj e-Legitymacje",
+          body:
+              "Dzięki aplikacji Ceremony możesz skanować każdą e-legitymację ceremoniarza, sprawdzać jej ważność i podstawowe dane na niej zapisane. Możesz zrobić to bez logowania się do aplikacji albo z poziomu menu opcji.",
           image: Center(
             child: Icon(
               Iconsax.mirroring_screen,
@@ -64,29 +77,17 @@ class _AboutPageState extends State<AboutPage> {
           ),
         ),
         PageViewModel(
-          title: "Title of second page",
+          title: "Przedłużaj ważność",
           body:
-              "Here you can write the description of the page, to explain someting...",
+              "Weź udział w conajmniej jednym zjeździe dla ceremoniarzy przez Duszpasterstwo Służby Liturgicznej w ciągu roku, zeskanuj kod i przedłuż ważność e-legitymacji o rok.",
           image: Center(
             child: Icon(
-              Iconsax.message_question,
+              Iconsax.calendar_tick,
               size: 140,
               color: HexColor('1e4e82'),
             ),
           ),
         ),
-        PageViewModel(
-          title: "Title of third page",
-          body:
-              "Here you can write the description of the page, to explain someting...",
-          image: Center(
-            child: Icon(
-              Iconsax.information,
-              size: 140,
-              color: HexColor('1e4e82'),
-            ),
-          ),
-        )
       ],
     );
   }
