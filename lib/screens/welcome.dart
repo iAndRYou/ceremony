@@ -18,6 +18,12 @@ class _WelcomePageState extends State<WelcomePage> {
       showBackButton: false,
       showSkipButton: true,
       showNextButton: true,
+      baseBtnStyle: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        primary: Colors.red,
+      ),
       next: const Icon(
         Iconsax.arrow_right_3,
         size: 30,
@@ -35,8 +41,8 @@ class _WelcomePageState extends State<WelcomePage> {
         Get.back();
       },
       dotsDecorator: DotsDecorator(
-          size: const Size.square(10.0),
-          activeSize: const Size(20.0, 10.0),
+          size: const Size.square(10),
+          activeSize: const Size(20, 10),
           activeColor: HexColor('1e4e82'),
           color: Colors.black26,
           spacing: const EdgeInsets.symmetric(horizontal: 3.0),
