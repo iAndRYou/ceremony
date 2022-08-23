@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:ceremony/themes/themes.dart';
 import 'package:flutter/services.dart';
@@ -7,9 +6,7 @@ import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp
-  ]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const App());
 }
 

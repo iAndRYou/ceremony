@@ -22,18 +22,21 @@ class _WelcomePageState extends State<WelcomePage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        primary: Colors.red,
+        primary: Colors.black26,
       ),
       next: const Icon(
         Iconsax.arrow_right_3,
-        size: 30,
+        size: 24,
         color: Colors.black87,
       ),
       skip: Text(
-        "Wyjdź",
-        style: Theme.of(context).textTheme.bodyMedium,
+        "Pomiń",
+        style: Theme.of(context).textTheme.headlineMedium,
       ),
-      done: const Text("Ok"),
+      done: Text(
+        "Ok",
+        style: Theme.of(context).textTheme.headlineMedium,
+      ),
       onDone: () {
         Get.back();
       },

@@ -1,4 +1,4 @@
-import 'package:ceremony/screens/welcome.dart';
+import 'package:ceremony/options/about.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -207,7 +207,8 @@ class _OptionsPageState extends State<OptionsPage> {
                     borderRadius: BorderRadius.circular(1500)),
               ),
               onPressed: () {
-                Get.to(() => const WelcomePage());
+                Get.to(() => const AboutPage(),
+                    transition: Transition.noTransition, popGesture: false);
               },
               child: const Icon(
                 Iconsax.book_1,
