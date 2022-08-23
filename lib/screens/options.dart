@@ -180,7 +180,7 @@ class _OptionsPageState extends State<OptionsPage> {
               ),
               onPressed: () async {},
               child: const Icon(
-                Iconsax.calendar,
+                Iconsax.calendar_tick,
                 size: 30,
                 color: Colors.black87,
               ),
