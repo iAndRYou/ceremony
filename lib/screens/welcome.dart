@@ -18,10 +18,17 @@ class _WelcomePageState extends State<WelcomePage> {
       showBackButton: false,
       showSkipButton: true,
       showNextButton: true,
-      next: const Icon(Iconsax.arrow_square),
-      skip: const Icon(Iconsax.close_square),
-      done: const Icon(Iconsax.tick_square),
+      next: const Icon(
+        Iconsax.arrow_right_3,
+        size: 30,
+        color: Colors.black87,
+      ),
+      skip: const Text("Wyjdź"),
+      done: const Text("Ok"),
       onDone: () {
+        Get.back();
+      },
+      onSkip: () {
         Get.back();
       },
       dotsDecorator: DotsDecorator(
