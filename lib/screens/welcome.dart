@@ -23,7 +23,10 @@ class _WelcomePageState extends State<WelcomePage> {
         size: 30,
         color: Colors.black87,
       ),
-      skip: const Text("Wyjdź"),
+      skip: Text(
+        "Wyjdź",
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
       done: const Text("Ok"),
       onDone: () {
         Get.back();
