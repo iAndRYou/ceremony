@@ -1,3 +1,4 @@
+import 'package:ceremony/screens/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -205,7 +206,9 @@ class _OptionsPageState extends State<OptionsPage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(1500)),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Get.to(() => const WelcomePage());
+              },
               child: const Icon(
                 Iconsax.book_1,
                 size: 30,
