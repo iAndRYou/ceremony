@@ -1,8 +1,13 @@
+import 'dart:html';
+
+import 'package:ceremony/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+
+import '../classes/preferences.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -37,45 +42,62 @@ class _WelcomePageState extends State<WelcomePage> {
         "Ok",
         style: Theme.of(context).textTheme.headlineMedium,
       ),
-      onDone: () {
-        Get.back();
+      onDone: () async {
+        await Cache().setFirstBoot();
+        Get.offAll(() => const LoginPage(),
+            transition: Transition.noTransition);
       },
-      onSkip: () {
-        Get.back();
+      onSkip: () async {
+        await Cache().setFirstBoot();
+        Get.offAll(() => const LoginPage(),
+            transition: Transition.noTransition);
       },
       dotsDecorator: DotsDecorator(
-          size: const Size.square(10),
-          activeSize: const Size(20, 10),
-          activeColor: HexColor('1e4e82'),
-          color: Colors.black26,
-          spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-          activeShape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0))),
+        size: const Size.square(10),
+        activeSize: const Size(20, 10),
+        activeColor: HexColor('1e4e82'),
+        color: Colors.black26,
+        spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+        activeShape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+      ),
       pages: [
         PageViewModel(
-          title: "Title of first page",
+          title: "Skanuj e-Legitymację",
           body:
-              "Here you can write the description of the page, to explain someting...",
-          image: const Center(
-            child: Icon(Iconsax.mirroring_screen),
+              "Dzięki aplikacji Ceremony możesz skanować każdą e-legitymację ceremoniarza, sprawdzać jej ważność i podstawowe dane na niej zapisane. Możesz zrobić to bez logowania się do aplikacji albo z poziomu menu opcji.",
+          image: Center(
+            child: Icon(
+              Iconsax.mirroring_screen,
+              size: 140,
+              color: HexColor('1e4e82'),
+            ),
           ),
         ),
         PageViewModel(
-          title: "Title of second page",
+          title: "e-Legitymacja",
           body:
-              "Here you can write the description of the page, to explain someting...",
-          image: const Center(
-            child: Icon(Iconsax.message_question),
+              "Zaloguj się, a dane twojej legitymacji oraz informacje o twojej posłudze zostaną zebrane w jednym miejscu - na twoim telefonie. Okazanie e-legitymacji w aplikacji jest równoprawne okazaniu fizycznego dokumentu. Tylko w aplikacji sprawdzisz, czy dokument jest ważny.",
+          image: Center(
+            child: Icon(
+              Iconsax.personalcard,
+              size: 140,
+              color: HexColor('1e4e82'),
+            ),
           ),
         ),
         PageViewModel(
-          title: "Title of third page",
+          title: "Przedłużaj ważność",
           body:
-              "Here you can write the description of the page, to explain someting...",
-          image: const Center(
-            child: Icon(Iconsax.information),
+              "Weź udział w conajmniej jednym zjeździe dla ceremoniarzy organizowanym przez Duszpasterstwo Służby Liturgicznej w ciągu roku, zeskanuj kod i przedłuż ważność e-legitymacji o rok.",
+          image: Center(
+            child: Icon(
+              Iconsax.calendar_tick,
+              size: 140,
+              color: HexColor('1e4e82'),
+            ),
           ),
-        )
+        ),
       ],
     );
   }
