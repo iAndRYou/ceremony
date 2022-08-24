@@ -190,7 +190,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 }
                 if (Platform.isAndroid) {
                   Get.to(() => const OptionsPage(),
-                      transition: Transition.cupertino,
+                      transition: Transition.rightToLeft,
+                      popGesture: false,
                       curve: Curves.ease,
                       opaque: true,
                       duration: const Duration(milliseconds: 700));

@@ -137,7 +137,7 @@ class _OptionsPageState extends State<OptionsPage> {
           ListTile(
             dense: true,
             title: Text(
-              "Aktualizuj dane",
+              "Skanuj e-Legitymację",
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             trailing: OutlinedButton(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -44,14 +45,28 @@ class _AboutPageState extends State<AboutPage> {
         Get.back();
       },
       dotsDecorator: DotsDecorator(
-          size: const Size.square(10),
-          activeSize: const Size(20, 10),
-          activeColor: HexColor('1e4e82'),
-          color: Colors.black26,
-          spacing: const EdgeInsets.symmetric(horizontal: 3.0),
-          activeShape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25.0))),
+        size: const Size.square(10),
+        activeSize: const Size(20, 10),
+        activeColor: HexColor('1e4e82'),
+        color: Colors.black26,
+        spacing: const EdgeInsets.symmetric(horizontal: 3.0),
+        activeShape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
+      ),
+      freeze: true,
       pages: [
+        PageViewModel(
+          title: "Skanuj e-Legitymację",
+          body:
+              "Dzięki aplikacji Ceremony możesz skanować każdą e-legitymację ceremoniarza, sprawdzać jej ważność i podstawowe dane na niej zapisane. Możesz zrobić to bez logowania się do aplikacji albo z poziomu menu opcji.",
+          image: Center(
+            child: Icon(
+              Iconsax.mirroring_screen,
+              size: 140,
+              color: HexColor('1e4e82'),
+            ),
+          ),
+        ),
         PageViewModel(
           title: "e-Legitymacja",
           body:
@@ -59,18 +74,6 @@ class _AboutPageState extends State<AboutPage> {
           image: Center(
             child: Icon(
               Iconsax.personalcard,
-              size: 140,
-              color: HexColor('1e4e82'),
-            ),
-          ),
-        ),
-        PageViewModel(
-          title: "Skanuj e-Legitymacje",
-          body:
-              "Dzięki aplikacji Ceremony możesz skanować każdą e-legitymację ceremoniarza, sprawdzać jej ważność i podstawowe dane na niej zapisane. Możesz zrobić to bez logowania się do aplikacji albo z poziomu menu opcji.",
-          image: Center(
-            child: Icon(
-              Iconsax.mirroring_screen,
               size: 140,
               color: HexColor('1e4e82'),
             ),
