@@ -1,13 +1,10 @@
-import 'dart:html';
-
 import 'package:ceremony/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-
-import '../classes/preferences.dart';
+import 'package:ceremony/classes/preferences.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
