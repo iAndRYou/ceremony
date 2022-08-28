@@ -2,9 +2,11 @@ import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/security.dart';
 import 'package:ceremony/classes/sheets.dart';
 import 'package:ceremony/classes/user.dart';
+import 'package:ceremony/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ceremony/classes/widgets.dart';
 import 'package:iconsax/iconsax.dart';
@@ -32,10 +34,10 @@ class _LoginPageState extends State<LoginPage> {
           options: const AuthenticationOptions(
             biometricOnly: true,
             useErrorDialogs: true,
-            stickyAuth: true,
+            stickyAuth: false,
           ),
         );
-      } on PlatformException catch (e) {
+      } on PlatformException {
         return false;
       }
     }
@@ -82,6 +84,20 @@ class _LoginPageState extends State<LoginPage> {
                     } else {
                       var ifSecureLogin = await Cache().ifSecureLogin();
                       if (ifSecureLogin) {
+                        var valid = await user.valid();
+                        var stamp = await TimeNow().getStamp();
+                        authenticate().then((authenticated) async {
+                          if (authenticated) {
+                            await Future.delayed(
+                                const Duration(milliseconds: 500));
+                            Get.offAll(
+                              () => Navigate(0, user, valid, stamp),
+                              transition: Transition.fadeIn,
+                              curve: Curves.ease,
+                              duration: const Duration(milliseconds: 1000),
+                            );
+                          }
+                        });
                       } else {
 // ignore: use_build_context_synchronously
                         await showPinBar(context, user);
