@@ -3,10 +3,12 @@ import 'package:ceremony/classes/security.dart';
 import 'package:ceremony/classes/sheets.dart';
 import 'package:ceremony/classes/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ceremony/classes/widgets.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:ndef/ndef.dart' as ndef;
 
 class LoginPage extends StatefulWidget {
@@ -22,6 +24,21 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     var token = encrypt(
         'CRMNY+C 0 0+Jan+Kowalski+07.05.2006+0+2023-05+14.05.2023+31.12.2023+1+św. Jana Kantego+4+Kraków+6+0 0 0+0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022+0');
+
+    Future<bool> ifAuthenticated() async {
+      try {
+        return await LocalAuthentication().authenticate(
+          localizedReason: 'Zaloguj się',
+          options: const AuthenticationOptions(
+            biometricOnly: true,
+            useErrorDialogs: true,
+            stickyAuth: true,
+          ),
+        );
+      } on PlatformException catch (e) {
+        return false;
+      }
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -63,8 +80,12 @@ class _LoginPageState extends State<LoginPage> {
                       // ignore: use_build_context_synchronously
                       await showFirstPinBar(context, user);
                     } else {
-                      // ignore: use_build_context_synchronously
-                      await showPinBar(context, user);
+                      var ifSecureLogin = await Cache().ifSecureLogin();
+                      if (ifSecureLogin) {
+                      } else {
+// ignore: use_build_context_synchronously
+                        await showPinBar(context, user);
+                      }
                     }
                   } else {
                     var availability = await FlutterNfcKit.nfcAvailability;
