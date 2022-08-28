@@ -47,4 +47,22 @@ class Cache {
       return true;
     }
   }
+
+  Future setIfSecureLogin(String value) async {
+    await _userData.write(key: 'secureLogin', value: value);
+  }
+
+  Future<bool> ifSecureLogin() async {
+    var secureLogin = await _userData.containsKey(key: 'secureLogin');
+    if (secureLogin) {
+      var ifSecureLogin = await _userData.read(key: 'secureLogin');
+      if (ifSecureLogin != null && ifSecureLogin == 'true') {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 }

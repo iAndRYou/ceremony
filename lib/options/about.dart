@@ -52,7 +52,7 @@ class _AboutPageState extends State<AboutPage> {
         activeShape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
       ),
-      freeze: true,
+      freeze: false,
       pages: [
         PageViewModel(
           title: "Skanuj e-Legitymację",

@@ -182,19 +182,17 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               onPressed: () {
                 if (Platform.isIOS) {
-                  Get.to(() => const OptionsPage(),
-                      transition: Transition.cupertino,
-                      curve: Curves.ease,
-                      opaque: true,
-                      duration: const Duration(milliseconds: 700));
+                  Get.to(
+                    () => const OptionsPage(),
+                    transition: Transition.cupertino,
+                  );
                 }
                 if (Platform.isAndroid) {
-                  Get.to(() => const OptionsPage(),
-                      transition: Transition.rightToLeft,
-                      popGesture: false,
-                      curve: Curves.ease,
-                      opaque: true,
-                      duration: const Duration(milliseconds: 700));
+                  Get.to(
+                    () => const OptionsPage(),
+                    transition: Transition.rightToLeft,
+                    popGesture: false,
+                  );
                 }
               },
               child: const Icon(

@@ -58,6 +58,7 @@ class _WelcomePageState extends State<WelcomePage> {
         activeShape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
       ),
+      freeze: true,
       pages: [
         PageViewModel(
           title: "Skanuj e-Legitymację",
