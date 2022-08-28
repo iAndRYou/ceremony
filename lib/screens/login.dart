@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
     var token = encrypt(
         'CRMNY+C 0 0+Jan+Kowalski+07.05.2006+0+2023-05+14.05.2023+31.12.2023+1+św. Jana Kantego+4+Kraków+6+0 0 0+0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022+0');
 
-    Future<bool> ifAuthenticated() async {
+    Future<bool> authenticate() async {
       try {
         return await LocalAuthentication().authenticate(
           localizedReason: 'Zaloguj się',
