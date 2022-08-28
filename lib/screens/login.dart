@@ -103,7 +103,11 @@ class _LoginPageState extends State<LoginPage> {
                         ndef.SignatureRecord(
                             hashType: 'SHA-256',
                             signatureType: 'DSA-1024',
-                            signatureURI: encrypt(tag.id))
+                            signatureURI: encrypt(tag.id)),
+                        ndef.SignatureRecord(
+                            hashType: 'SHA-256',
+                            signatureType: 'DSA-1024',
+                            signatureURI: encrypt(tag.id)),
                       ]);
                       print('written id card');
                     }
