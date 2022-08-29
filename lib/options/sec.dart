@@ -1,8 +1,11 @@
 import 'package:ceremony/classes/preferences.dart';
+import 'package:ceremony/classes/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+
+import '../classes/sheets.dart';
 
 class SecurityOptions extends StatefulWidget {
   const SecurityOptions({Key? key}) : super(key: key);
@@ -84,6 +87,51 @@ class _SecurityOptionsState extends State<SecurityOptions> {
                     ifSecureLogin = !ifSecureLogin;
                   });
                 }),
+          ),
+          const Divider(
+            height: 3,
+            color: Colors.white,
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 0, 10, 15),
+            child: Text(
+              "Logowanie do aplikacji wykorzystuje skaner odcisków palców, albo system rozpoznawania twarzy.",
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.justify,
+            ),
+          ),
+          const Divider(
+            height: 3,
+            color: Colors.white,
+          ),
+          ListTile(
+            dense: true,
+            title: Text(
+              "Zmień PIN e-legitymacji",
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            trailing: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                primary: Colors.white,
+                side: const BorderSide(
+                  color: Colors.white,
+                ),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(1500)),
+              ),
+              onPressed: () async {
+                var token = await Cache().getToken();
+                var user = User.fromToken(token);
+                // ignore: use_build_context_synchronously
+                showChangePinBar(context, user);
+              },
+              child: const Icon(
+                Iconsax.edit,
+                size: 30,
+                color: Colors.black87,
+              ),
+            ),
           ),
           const Divider(
             height: 3,

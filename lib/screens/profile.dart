@@ -181,19 +181,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: BorderRadius.circular(1500)),
               ),
               onPressed: () {
-                if (Platform.isIOS) {
-                  Get.to(
-                    () => const OptionsPage(),
-                    transition: Transition.cupertino,
-                  );
-                }
-                if (Platform.isAndroid) {
-                  Get.to(
-                    () => const OptionsPage(),
-                    transition: Transition.rightToLeft,
-                    popGesture: false,
-                  );
-                }
+                Get.to(
+                  () => const OptionsPage(),
+                  transition: Transition.cupertino,
+                );
               },
               child: const Icon(
                 Iconsax.arrow_right_3,

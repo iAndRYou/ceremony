@@ -1,5 +1,6 @@
 import 'package:ceremony/options/about.dart';
 import 'package:ceremony/options/sec.dart';
+import 'package:ceremony/options/who.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -67,7 +68,9 @@ class _OptionsPageState extends State<OptionsPage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(1500)),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Get.to(() => const WhoIs(), transition: Transition.cupertino);
+              },
               child: const Icon(
                 Iconsax.message_question,
                 size: 30,
