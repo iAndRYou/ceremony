@@ -28,6 +28,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: lightThemeData(),
       darkTheme: lightThemeData(),
       home: ifFirstBoot ? const WelcomePage() : const LoginPage(),
