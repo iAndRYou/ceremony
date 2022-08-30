@@ -181,6 +181,13 @@ class _LoginPageState extends State<LoginPage> {
                     showErrorAlert('NFC', 'Brak dostępu do modułu NFC');
                   } else {
                     var tag = await FlutterNfcKit.poll(
+                        iosAlertMessage: "Hold your iPhone close to e-ID",
+                        iosMultipleTagMessage: "Only one e-ID allowed",
+                        readIso14443A: true,
+                        readIso14443B: true,
+                        readIso18092: true,
+                        readIso15693: true,
+                        androidPlatformSound: false,
                         timeout: const Duration(minutes: 2));
                     if (tag.type == NFCTagType.mifare_classic &&
                         tag.ndefWritable!) {
