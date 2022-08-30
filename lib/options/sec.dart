@@ -93,7 +93,7 @@ class _SecurityOptionsState extends State<SecurityOptions> {
             color: Colors.white,
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(15, 0, 10, 15),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
             child: Text(
               "Logowanie do aplikacji wykorzystuje skaner odcisków palców, albo system rozpoznawania twarzy.",
               style: Theme.of(context).textTheme.bodyMedium,
