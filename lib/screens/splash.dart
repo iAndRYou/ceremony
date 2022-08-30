@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -32,25 +33,29 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned(
-            left: MediaQuery.of(context).size.width / 2 - 100,
-            top: MediaQuery.of(context).size.height / 2 - 220,
-            child: SvgPicture.asset(
-              'lib/assets/cer.svg',
-              width: 200,
-            ),
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 50),
+              SvgPicture.asset(
+                'lib/assets/cer.svg',
+                width: 200,
+              ),
+              const SizedBox(height: 60),
+              const Center(
+                child: CupertinoActivityIndicator(
+                  animating: true,
+                  radius: 25,
+                ),
+              ),
+            ],
           ),
-          Positioned(
-              left: MediaQuery.of(context).size.width / 2 - 25,
-              top: MediaQuery.of(context).size.height / 2 + 140,
-              child: const CupertinoActivityIndicator(
-                animating: true,
-                radius: 25,
-              )),
-        ],
+        ),
       ),
     );
   }
