@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<bool> authenticate() async {
     try {
       return await LocalAuthentication().authenticate(
-        localizedReason: '',
+        localizedReason: 'Ceremony',
         options: const AuthenticationOptions(
           biometricOnly: true,
           useErrorDialogs: true,
