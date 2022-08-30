@@ -5,25 +5,32 @@ cardRead() {
   var gotToken;
   var gotID;
   var id;
-  NfcManager.instance.startSession(onDiscovered: (NfcTag tag) async {
-    var ndef = Ndef.from(tag);
-    var mifare = MifareClassic.from(tag);
-    if (ndef == null || !ndef.isWritable) {
-      NfcManager.instance
-          .stopSession(errorMessage: 'Niewłaściwa karta. Spróbuj ponownie.');
-      return;
-    }
-    if (mifare == null) {
-      NfcManager.instance
-          .stopSession(errorMessage: 'Niewłaściwa karta. Spróbuj ponownie.');
-      return;
-    }
+  NfcManager.instance.startSession(
+      onDiscovered: (NfcTag tag) async {
+        var ndef = Ndef.from(tag);
+        var mifare = MifareClassic.from(tag);
+        if (ndef == null || !ndef.isWritable) {
+          NfcManager.instance.stopSession(
+              errorMessage: 'Niewłaściwa karta. Spróbuj ponownie.');
+          return;
+        }
+        if (mifare == null) {
+          NfcManager.instance.stopSession(
+              errorMessage: 'Niewłaściwa karta. Spróbuj ponownie.');
+          return;
+        }
 
-    gotToken = ndef.cachedMessage?.records[0].payload;
-    gotID = ndef.cachedMessage?.records[1].payload;
-    id = mifare.identifier.toString();
-    NfcManager.instance.stopSession();
-  });
+        gotToken = ndef.cachedMessage?.records[0].payload;
+        gotID = ndef.cachedMessage?.records[1].payload;
+        id = mifare.identifier.toString();
+        NfcManager.instance.stopSession();
+      },
+      onError: ((error) async {
+        NfcManager.instance
+            .stopSession(errorMessage: 'Wystąpił błąd. Spróbuj ponownie.');
+      }),
+      alertMessage: "Keep your phone close to the ID",
+      pollingOptions: {NfcPollingOption.iso14443});
   return [gotToken, gotID, id];
 }
 

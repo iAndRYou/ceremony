@@ -365,7 +365,7 @@
 				DEVELOPMENT_TEAM = B94VXP6Y2Y;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "Runner/Info-$(CONFIGURATION).plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -501,7 +501,7 @@
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = "Runner/Info-$(CONFIGURATION).plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -530,7 +530,7 @@
 				DEVELOPMENT_TEAM = B94VXP6Y2Y;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "Runner/Info-$(CONFIGURATION).plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
