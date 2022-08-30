@@ -1161,23 +1161,6 @@ class _DutyDataExtendedState extends State<DutyDataExtended> {
                       ),
                     )
                   : Container(),
-              Divider(
-                height: 3,
-                indent: 15,
-                endIndent: 15,
-                color: Theme.of(context).dividerColor,
-              ),
-              ListTile(
-                dense: true,
-                title: Text(
-                  user.duration(),
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                subtitle: Text(
-                  "Rok posługi",
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
             ],
           ),
         ),

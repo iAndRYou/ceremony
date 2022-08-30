@@ -5,14 +5,13 @@ import 'package:ceremony/classes/user.dart';
 import 'package:ceremony/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:ndef/ndef.dart' as ndef;
+import 'package:nfc_manager/nfc_manager.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -154,8 +153,8 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     }
                   } else {
-                    var availability = await FlutterNfcKit.nfcAvailability;
-                    if (availability != NFCAvailability.available) {
+                    var availability = await NfcManager.instance.isAvailable();
+                    if (!availability) {
                       showErrorAlert('NFC', 'Brak dostępu do modułu NFC');
                     } else {
                       await showLoginIDScanner();
@@ -176,35 +175,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 onPressed: () async {
                   await Cache().setToken(token);
-                  var availability = await FlutterNfcKit.nfcAvailability;
-                  if (availability != NFCAvailability.available) {
+                  var availability = await NfcManager.instance.isAvailable();
+                  if (!availability) {
                     showErrorAlert('NFC', 'Brak dostępu do modułu NFC');
                   } else {
-                    var tag = await FlutterNfcKit.poll(
-                        iosAlertMessage: "Hold your iPhone close to e-ID",
-                        iosMultipleTagMessage: "Only one e-ID allowed",
-                        readIso14443A: true,
-                        readIso14443B: true,
-                        readIso18092: true,
-                        readIso15693: true,
-                        androidPlatformSound: false,
-                        timeout: const Duration(minutes: 2));
-                    if (tag.type == NFCTagType.mifare_classic &&
-                        tag.ndefWritable!) {
-                      print('got id card');
-                      await FlutterNfcKit.writeNDEFRecords([
-                        ndef.UriRecord.fromString(token),
-                        ndef.SignatureRecord(
-                            hashType: 'SHA-256',
-                            signatureType: 'DSA-1024',
-                            signatureURI: encrypt(tag.id)),
-                        ndef.SignatureRecord(
-                            hashType: 'SHA-256',
-                            signatureType: 'DSA-1024',
-                            signatureURI: encrypt(tag.id)),
-                      ]);
-                      print('written id card');
-                    }
+                    NfcManager.instance
+                        .startSession(onDiscovered: (NfcTag tag) async {});
                   }
                 },
                 child: const Icon(
