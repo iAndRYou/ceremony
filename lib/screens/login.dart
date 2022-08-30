@@ -3,6 +3,7 @@ import 'package:ceremony/classes/security.dart';
 import 'package:ceremony/classes/sheets.dart';
 import 'package:ceremony/classes/user.dart';
 import 'package:ceremony/navigation.dart';
+import 'package:ceremony/nfc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -179,8 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (!availability) {
                     showErrorAlert('NFC', 'Brak dostępu do modułu NFC');
                   } else {
-                    NfcManager.instance
-                        .startSession(onDiscovered: (NfcTag tag) async {});
+                    var got = cardRead();
                   }
                 },
                 child: const Icon(
