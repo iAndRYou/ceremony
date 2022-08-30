@@ -25,6 +25,7 @@ dependencies:
   intl: ^0.17.0
   introduction_screen: ^3.0.2
   local_auth: ^2.1.2
+  flutter_svg: ^1.1.4
   flutter:
     sdk: flutter
 
@@ -41,3 +42,4 @@ flutter:
 
   assets:
     - lib/assets/ddsl.png
+    - lib/assets/cer.svg

@@ -1,9 +1,9 @@
 import 'package:ceremony/classes/preferences.dart';
+import 'package:ceremony/screens/splash.dart';
 import 'package:ceremony/screens/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:ceremony/themes/themes.dart';
 import 'package:flutter/services.dart';
-import 'package:ceremony/screens/login.dart';
 import 'package:get/get.dart';
 
 void main() async {
@@ -31,7 +31,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightThemeData(),
       darkTheme: lightThemeData(),
-      home: ifFirstBoot ? const WelcomePage() : const LoginPage(),
+      home: ifFirstBoot ? const WelcomePage() : const SplashScreen(),
     );
   }
 }

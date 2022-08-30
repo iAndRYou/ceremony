@@ -1,4 +1,4 @@
-import 'package:ceremony/screens/login.dart';
+import 'package:ceremony/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -41,12 +41,12 @@ class _WelcomePageState extends State<WelcomePage> {
       ),
       onDone: () async {
         await Cache().setFirstBoot();
-        Get.offAll(() => const LoginPage(),
+        Get.offAll(() => const SplashScreen(),
             transition: Transition.noTransition);
       },
       onSkip: () async {
         await Cache().setFirstBoot();
-        Get.offAll(() => const LoginPage(),
+        Get.offAll(() => const SplashScreen(),
             transition: Transition.noTransition);
       },
       dotsDecorator: DotsDecorator(
