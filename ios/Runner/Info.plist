@@ -25,7 +25,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NFCReaderUsageDescription</key>
-	<string>ID Reader</string>
+	<string>e-Legitymajca</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Bezpieczeństwo</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
