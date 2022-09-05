@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.nfc">
+    package="com.ceremony.appp">
    <application
-        android:label="nfc"
+        android:label="ceremony"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
