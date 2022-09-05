@@ -1,9 +1,9 @@
+import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/security.dart';
 import 'package:ceremony/classes/sheets.dart';
 import 'package:ceremony/classes/user.dart';
 import 'package:ceremony/navigation.dart';
-import 'package:ceremony/nfc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,7 +12,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:nfc_manager/nfc_manager.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -154,8 +153,8 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     }
                   } else {
-                    var availability = await NfcManager.instance.isAvailable();
-                    if (!availability) {
+                    var availability = await FlutterNfcKit.nfcAvailability;
+                    if (availability == NFCAvailability.not_supported) {
                       showErrorAlert('NFC', 'Brak dostępu do modułu NFC');
                     } else {
                       await showLoginIDScanner();
@@ -176,11 +175,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 onPressed: () async {
                   await Cache().setToken(token);
-                  var availability = await NfcManager.instance.isAvailable();
-                  if (!availability) {
+                  var availability = await FlutterNfcKit.nfcAvailability;
+                  if (availability == NFCAvailability.not_supported) {
                     showErrorAlert('NFC', 'Brak dostępu do modułu NFC');
                   } else {
-                    var got = cardRead();
+                    var tag = await FlutterNfcKit.poll(
+                        timeout: Duration(seconds: 10),
+                        iosMultipleTagMessage: "Multiple tags found!",
+                        iosAlertMessage: "Scan your tag");
                   }
                 },
                 child: const Icon(

@@ -1,6 +1,6 @@
-# ceremony
+# nfc
 
-Ceremony ID Multitool App
+A new Flutter project.
 
 ## Getting Started
 

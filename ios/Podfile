@@ -23,7 +23,6 @@ end
 require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
 
 flutter_ios_podfile_setup
-flutter_application_path = '/Users/AndRYou/Desktop/App Dev/ceremony'
 
 target 'Runner' do
   use_frameworks!
@@ -37,4 +36,3 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
   end
 end
-

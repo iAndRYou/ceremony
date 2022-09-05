@@ -1,16 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ceremony.app">
-    <uses-permission android:name="android.permission.NFC"/>
-    <uses-feature
-        android:name="android.hardware.nfc"
-        android:required="true" />
+    package="com.example.nfc">
    <application
-        android:label="ceremony"
+        android:label="nfc"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
