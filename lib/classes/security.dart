@@ -11,6 +11,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:ntp/ntp.dart';
 
 import '../navigation.dart';
+import '../screens/login.dart';
 
 List<String> keys = [
   '4t7w!z%C*F)J@NcRfUjXn2r5u8x/A?D(',
@@ -125,6 +126,30 @@ Future loginUser() async {
           showErrorAlert("Błędny PIN", "Spróbuj ponownie");
         }
       }
+    }
+  }
+}
+
+Future logoutUser() async {
+  var token = await Cache().getToken();
+  var user = User.fromToken(token);
+  // ignore: use_build_context_synchronously
+  var enteredPin = await Get.to(
+    () => const LogoutPad(),
+    transition: Transition.noTransition,
+    duration: const Duration(milliseconds: 600),
+  );
+  if (enteredPin == user.pin) {
+    Get.offAll(
+      () => const LoginPage(),
+      transition: Transition.fadeIn,
+      curve: Curves.ease,
+      duration: const Duration(milliseconds: 1000),
+    );
+  } else {
+    if (enteredPin != null) {
+      await Future.delayed(const Duration(milliseconds: 700));
+      showErrorAlert("Błędny PIN", "Spróbuj ponownie");
     }
   }
 }
