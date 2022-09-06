@@ -90,6 +90,7 @@ class _PinPadState extends State<PinPad> {
                   ),
                 ),
               ),
+              const SizedBox(height: 5),
               Padding(
                 padding: const EdgeInsets.fromLTRB(110, 0, 110, 0),
                 child: PinCodeTextField(
@@ -212,6 +213,7 @@ class _ChangePinPadState extends State<ChangePinPad> {
                   ),
                 ),
               ),
+              const SizedBox(height: 5),
               Padding(
                 padding: const EdgeInsets.fromLTRB(110, 0, 110, 0),
                 child: PinCodeTextField(
@@ -327,6 +329,7 @@ class _LogoutPadState extends State<LogoutPad> {
                   ),
                 ),
               ),
+              const SizedBox(height: 5),
               Padding(
                 padding: const EdgeInsets.fromLTRB(110, 0, 110, 0),
                 child: PinCodeTextField(
