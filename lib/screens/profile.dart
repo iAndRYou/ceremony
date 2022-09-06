@@ -60,8 +60,30 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+            child: Row(
+              children: [
+                Text(
+                  user.title(),
+                  textAlign: TextAlign.left,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                Text(
+                  "ID: ${user.id}",
+                  textAlign: TextAlign.right,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
           child: Divider(
-            height: 3,
+            height: 10,
             color: Theme.of(context).dividerColor,
           ),
         ),

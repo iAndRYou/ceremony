@@ -45,7 +45,7 @@ String decrypt(String id) {
 class TimeNow {
   Future<String> getStamp() async {
     var now = await NTP.now();
-    return "${DateFormat('dd.MM.yyyy').format(now)}   ${DateFormat('HH:mm').format(now)}";
+    return "${DateFormat('dd.MM.yyyy').format(now)}   ${DateFormat('HH:mm:ss').format(now)}";
   }
 }
 

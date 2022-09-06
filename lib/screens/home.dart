@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ceremony/classes/security.dart';
 import 'package:ceremony/classes/widgets.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +23,28 @@ class _HomePageState extends State<HomePage> {
   bool valid;
   String stamp;
   _HomePageState(this.user, this.valid, this.stamp);
+
+  @override
+  void initState() {
+    super.initState();
+    Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) async {
+        var refreshedStamp = await TimeNow().getStamp();
+        if (mounted) {
+          setState(() {
+            stamp = refreshedStamp;
+          });
+        }
+        var refreshedValid = await user.valid();
+        if (mounted) {
+          setState(() {
+            valid = refreshedValid;
+          });
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

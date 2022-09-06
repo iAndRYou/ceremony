@@ -67,31 +67,7 @@ class _PinPadState extends State<PinPad> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        leading: TextButton(
-          style: OutlinedButton.styleFrom(
-            primary: Colors.white,
-            side: const BorderSide(
-              color: Colors.white,
-            ),
-            elevation: 0,
-          ),
-          onPressed: () async {
-            Get.back(result: null);
-          },
-          child: Text(
-            "Anuluj",
-            textAlign: TextAlign.left,
-            style: GoogleFonts.lato(
-              textStyle: TextStyle(
-                color: HexColor('1e4e82'),
-                fontWeight: FontWeight.w700,
-                fontSize: 13,
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Center(
