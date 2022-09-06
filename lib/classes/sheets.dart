@@ -90,8 +90,9 @@ class _PinPadState extends State<PinPad> {
                   ),
                 ),
               ),
+              const SizedBox(height: 5),
               Padding(
-                padding: const EdgeInsets.fromLTRB(80, 0, 80, 0),
+                padding: const EdgeInsets.fromLTRB(110, 0, 110, 0),
                 child: PinCodeTextField(
                   appContext: context,
                   length: 4,
@@ -113,8 +114,8 @@ class _PinPadState extends State<PinPad> {
                   enableActiveFill: false,
                   enablePinAutofill: false,
                   obscuringWidget: Container(
-                    height: 30,
-                    width: 30,
+                    height: 15,
+                    width: 15,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       color: Colors.black,
@@ -122,8 +123,8 @@ class _PinPadState extends State<PinPad> {
                   ),
                   pinTheme: PinTheme(
                     shape: PinCodeFieldShape.circle,
-                    fieldHeight: 30,
-                    fieldWidth: 30,
+                    fieldHeight: 15,
+                    fieldWidth: 15,
                     fieldOuterPadding: const EdgeInsets.all(10),
                     borderWidth: 1,
                     inactiveColor: Colors.black26,
@@ -212,8 +213,9 @@ class _ChangePinPadState extends State<ChangePinPad> {
                   ),
                 ),
               ),
+              const SizedBox(height: 5),
               Padding(
-                padding: const EdgeInsets.fromLTRB(80, 0, 80, 0),
+                padding: const EdgeInsets.fromLTRB(110, 0, 110, 0),
                 child: PinCodeTextField(
                   appContext: context,
                   length: 4,
@@ -235,8 +237,8 @@ class _ChangePinPadState extends State<ChangePinPad> {
                   enableActiveFill: false,
                   enablePinAutofill: false,
                   obscuringWidget: Container(
-                    height: 30,
-                    width: 30,
+                    height: 15,
+                    width: 15,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       color: Colors.black,
@@ -244,8 +246,8 @@ class _ChangePinPadState extends State<ChangePinPad> {
                   ),
                   pinTheme: PinTheme(
                     shape: PinCodeFieldShape.circle,
-                    fieldHeight: 30,
-                    fieldWidth: 30,
+                    fieldHeight: 15,
+                    fieldWidth: 15,
                     fieldOuterPadding: const EdgeInsets.all(10),
                     borderWidth: 1,
                     inactiveColor: Colors.black26,
@@ -327,8 +329,9 @@ class _LogoutPadState extends State<LogoutPad> {
                   ),
                 ),
               ),
+              const SizedBox(height: 5),
               Padding(
-                padding: const EdgeInsets.fromLTRB(80, 0, 80, 0),
+                padding: const EdgeInsets.fromLTRB(110, 0, 110, 0),
                 child: PinCodeTextField(
                   appContext: context,
                   length: 4,
@@ -350,8 +353,8 @@ class _LogoutPadState extends State<LogoutPad> {
                   enableActiveFill: false,
                   enablePinAutofill: false,
                   obscuringWidget: Container(
-                    height: 30,
-                    width: 30,
+                    height: 15,
+                    width: 15,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       color: Colors.black,
@@ -359,8 +362,8 @@ class _LogoutPadState extends State<LogoutPad> {
                   ),
                   pinTheme: PinTheme(
                     shape: PinCodeFieldShape.circle,
-                    fieldHeight: 30,
-                    fieldWidth: 30,
+                    fieldHeight: 15,
+                    fieldWidth: 15,
                     fieldOuterPadding: const EdgeInsets.all(10),
                     borderWidth: 1,
                     inactiveColor: Colors.black26,
