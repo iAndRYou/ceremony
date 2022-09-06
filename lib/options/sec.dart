@@ -123,8 +123,48 @@ class _SecurityOptionsState extends State<SecurityOptions> {
               onPressed: () async {
                 var token = await Cache().getToken();
                 var user = User.fromToken(token);
-                // ignore: use_build_context_synchronously
-                showChangePinBar(context, user);
+                var enteredPin = await Get.to(
+                  () => const ChangePinPad(
+                    prompt: "Podaj PIN",
+                  ),
+                  transition: Transition.cupertino,
+                  duration: const Duration(milliseconds: 600),
+                );
+                if (enteredPin == user.pin) {
+                  var newPin = await Get.to(
+                    () => const ChangePinPad(
+                      prompt: "Ustaw PIN",
+                    ),
+                    transition: Transition.noTransition,
+                    duration: const Duration(milliseconds: 600),
+                  );
+                  if (newPin != null) {
+                    var changedPin = await Get.to(
+                      () => const ChangePinPad(
+                        prompt: "Powtórz PIN",
+                      ),
+                      transition: Transition.noTransition,
+                      duration: const Duration(milliseconds: 600),
+                    );
+                    if (changedPin == newPin) {
+                      user.pin = changedPin;
+                      Cache().setToken(user.toToken());
+                      await Future.delayed(const Duration(milliseconds: 700));
+                      showCompleteAlert(
+                          "Zmieniono PIN", "Poprawnie zmieniono dane");
+                    } else {
+                      if (changedPin != null) {
+                        await Future.delayed(const Duration(milliseconds: 700));
+                        showErrorAlert("Błędny PIN", "Podano różne kody PIN");
+                      }
+                    }
+                  } else {}
+                } else {
+                  if (enteredPin != null) {
+                    await Future.delayed(const Duration(milliseconds: 700));
+                    showErrorAlert("Błędny PIN", "Spróbuj ponownie");
+                  }
+                }
               },
               child: const Icon(
                 Iconsax.edit,

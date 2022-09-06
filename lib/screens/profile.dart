@@ -2,6 +2,7 @@ import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/sheets.dart';
 import 'package:ceremony/classes/user.dart';
 import 'package:ceremony/classes/widgets.dart';
+import 'package:ceremony/screens/login.dart';
 import 'package:ceremony/screens/options.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -142,7 +143,50 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: BorderRadius.circular(1500)),
               ),
               onPressed: () async {
-                showChangePinBar(context, user);
+                var token = await Cache().getToken();
+                var user = User.fromToken(token);
+                var enteredPin = await Get.to(
+                  () => const ChangePinPad(
+                    prompt: "Podaj PIN",
+                  ),
+                  transition: Transition.cupertino,
+                  duration: const Duration(milliseconds: 600),
+                );
+                if (enteredPin == user.pin) {
+                  var newPin = await Get.to(
+                    () => const ChangePinPad(
+                      prompt: "Ustaw PIN",
+                    ),
+                    transition: Transition.noTransition,
+                    duration: const Duration(milliseconds: 600),
+                  );
+                  if (newPin != null) {
+                    var changedPin = await Get.to(
+                      () => const ChangePinPad(
+                        prompt: "Powtórz PIN",
+                      ),
+                      transition: Transition.noTransition,
+                      duration: const Duration(milliseconds: 600),
+                    );
+                    if (changedPin == newPin) {
+                      user.pin = changedPin;
+                      Cache().setToken(user.toToken());
+                      await Future.delayed(const Duration(milliseconds: 700));
+                      showCompleteAlert(
+                          "Zmieniono PIN", "Poprawnie zmieniono dane");
+                    } else {
+                      if (changedPin != null) {
+                        await Future.delayed(const Duration(milliseconds: 700));
+                        showErrorAlert("Błędny PIN", "Podano różne kody PIN");
+                      }
+                    }
+                  } else {}
+                } else {
+                  if (enteredPin != null) {
+                    await Future.delayed(const Duration(milliseconds: 700));
+                    showErrorAlert("Błędny PIN", "Spróbuj ponownie");
+                  }
+                }
               },
               child: const Icon(
                 Iconsax.edit,
@@ -235,7 +279,24 @@ class _ProfilePageState extends State<ProfilePage> {
                     var token = await Cache().getToken();
                     var user = User.fromToken(token);
                     // ignore: use_build_context_synchronously
-                    await showLogoutBar(context, user);
+                    var enteredPin = await Get.to(
+                      () => const LogoutPad(),
+                      transition: Transition.fadeIn,
+                      duration: const Duration(milliseconds: 600),
+                    );
+                    if (enteredPin == user.pin) {
+                      Get.offAll(
+                        () => const LoginPage(),
+                        transition: Transition.fadeIn,
+                        curve: Curves.ease,
+                        duration: const Duration(milliseconds: 1000),
+                      );
+                    } else {
+                      if (enteredPin != null) {
+                        await Future.delayed(const Duration(milliseconds: 700));
+                        showErrorAlert("Błędny PIN", "Spróbuj ponownie");
+                      }
+                    }
                   },
                 ),
               ),

@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 showErrorAlert(title, message) {
@@ -83,7 +84,6 @@ class _PinPadState extends State<PinPad> {
                 'lib/assets/cer.svg',
                 width: 200,
               ),
-              const SizedBox(height: 5),
               Text(
                 "Podaj PIN",
                 textAlign: TextAlign.center,
@@ -149,448 +149,193 @@ class _PinPadState extends State<PinPad> {
   }
 }
 
-_showFirstPinBar2(context, User user, pin) async {
-  Get.snackbar(
-    '',
-    '',
-    margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-    animationDuration: const Duration(milliseconds: 800),
-    duration: const Duration(minutes: 2),
-    backgroundColor: Colors.white,
-    borderColor: Colors.black12,
-    borderWidth: 1,
-    overlayBlur: 2,
-    titleText: Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Text("Potwierdź PIN", style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 20),
-          PinCodeTextField(
-            appContext: context,
-            length: 4,
-            onChanged: (String value) async {
-              if (value.length == 4) {
-                Get.back();
-                if (value == pin) {
-                  user.pin = value;
-                  var token = user.toToken();
-                  await Cache().setToken(token);
-                  var valid = await user.valid();
-                  var stamp = await TimeNow().getStamp();
-                  showCompleteAlert('Zalogowano', 'Wprowadzono dane pomyślnie');
-                  await Future.delayed(const Duration(milliseconds: 2000));
-                  Get.offAll(
-                    () => Navigate(0, user, valid, stamp),
-                    transition: Transition.fadeIn,
-                    curve: Curves.ease,
-                    duration: const Duration(milliseconds: 1500),
-                  );
-                } else {
-                  showErrorAlert(
-                      'Wprowadzono różne kody PIN', 'Spróbuj ponownie');
-                }
-              }
-            },
-            keyboardType: const TextInputType.numberWithOptions(
-                signed: false, decimal: false),
-            useHapticFeedback: true,
-            autoFocus: true,
-            autoUnfocus: true,
-            autoDismissKeyboard: true,
-            useExternalAutoFillGroup: false,
-            blinkWhenObscuring: false,
-            showCursor: false,
-            obscureText: true,
-            enableActiveFill: false,
-            enablePinAutofill: false,
-            obscuringWidget: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: Colors.black,
-              ),
-            ),
-            pinTheme: PinTheme(
-              shape: PinCodeFieldShape.circle,
-              fieldHeight: 50,
-              fieldWidth: 50,
-              fieldOuterPadding: const EdgeInsets.all(10),
-              borderWidth: 1,
-              inactiveColor: Colors.black26,
-              activeColor: Colors.black,
-              selectedColor: HexColor('1e4e82'),
-              activeFillColor: Colors.black,
-            ),
-            animationType: AnimationType.none,
-            animationDuration: const Duration(milliseconds: 0),
-          )
-        ],
-      ),
-    ),
-  );
+class ChangePinPad extends StatefulWidget {
+  final String prompt;
+  const ChangePinPad({
+    Key? key,
+    required this.prompt,
+  }) : super(key: key);
+
+  @override
+  // ignore: no_logic_in_create_state
+  State<ChangePinPad> createState() => _ChangePinPadState(prompt);
 }
 
-showFirstPinBar(context, user) async {
-  Get.snackbar(
-    '',
-    '',
-    margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-    animationDuration: const Duration(milliseconds: 800),
-    duration: const Duration(minutes: 2),
-    backgroundColor: Colors.white,
-    borderColor: Colors.black12,
-    borderWidth: 1,
-    overlayBlur: 2,
-    titleText: Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Text("Ustaw PIN", style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 20),
-          PinCodeTextField(
-            appContext: context,
-            length: 4,
-            onChanged: (String value) async {
-              if (value.length == 4) {
-                Get.back();
-                await _showFirstPinBar2(context, user, value);
-              }
-            },
-            keyboardType: const TextInputType.numberWithOptions(
-                signed: false, decimal: false),
-            useHapticFeedback: true,
-            autoFocus: true,
-            autoUnfocus: true,
-            autoDismissKeyboard: false,
-            useExternalAutoFillGroup: false,
-            blinkWhenObscuring: false,
-            showCursor: false,
-            obscureText: true,
-            enableActiveFill: false,
-            enablePinAutofill: false,
-            obscuringWidget: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: Colors.black,
+class _ChangePinPadState extends State<ChangePinPad> {
+  String prompt;
+  _ChangePinPadState(this.prompt);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 196),
+              const Icon(
+                Iconsax.edit,
+                size: 100,
+                color: Colors.black54,
               ),
-            ),
-            pinTheme: PinTheme(
-              shape: PinCodeFieldShape.circle,
-              fieldHeight: 50,
-              fieldWidth: 50,
-              fieldOuterPadding: const EdgeInsets.all(10),
-              borderWidth: 1,
-              inactiveColor: Colors.black26,
-              activeColor: Colors.black,
-              selectedColor: HexColor('1e4e82'),
-              activeFillColor: Colors.black,
-            ),
-            animationType: AnimationType.fade,
-            animationDuration: const Duration(milliseconds: 100),
-          )
-        ],
+              const SizedBox(height: 50),
+              Text(
+                prompt,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.lato(
+                  textStyle: const TextStyle(
+                    color: Colors.black54,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(80, 0, 80, 0),
+                child: PinCodeTextField(
+                  appContext: context,
+                  length: 4,
+                  onChanged: (String value) async {
+                    if (value.length == 4) {
+                      Get.back(result: value);
+                    }
+                  },
+                  keyboardType: const TextInputType.numberWithOptions(
+                      signed: false, decimal: false),
+                  useHapticFeedback: true,
+                  autoFocus: true,
+                  autoUnfocus: true,
+                  autoDismissKeyboard: true,
+                  useExternalAutoFillGroup: false,
+                  blinkWhenObscuring: false,
+                  showCursor: false,
+                  obscureText: true,
+                  enableActiveFill: false,
+                  enablePinAutofill: false,
+                  obscuringWidget: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: Colors.black,
+                    ),
+                  ),
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.circle,
+                    fieldHeight: 30,
+                    fieldWidth: 30,
+                    fieldOuterPadding: const EdgeInsets.all(10),
+                    borderWidth: 1,
+                    inactiveColor: Colors.black26,
+                    activeColor: Colors.black,
+                    selectedColor: HexColor('1e4e82'),
+                    activeFillColor: Colors.black,
+                  ),
+                  animationType: AnimationType.none,
+                  animationDuration: const Duration(milliseconds: 0),
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
-_showSecondChangePinBar(context, User user, pin) async {
-  Get.snackbar(
-    '',
-    '',
-    margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-    animationDuration: const Duration(milliseconds: 800),
-    duration: const Duration(minutes: 2),
-    backgroundColor: Colors.white,
-    borderColor: Colors.black12,
-    borderWidth: 1,
-    overlayBlur: 2,
-    titleText: Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Text("Potwierdź PIN", style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 20),
-          PinCodeTextField(
-            appContext: context,
-            length: 4,
-            onChanged: (String value) async {
-              if (value.length == 4) {
-                Get.back();
-                if (value == pin) {
-                  user.pin = value;
-                  var token = user.toToken();
-                  await Cache().setToken(token);
-                  showCompleteAlert(
-                      'Zmieniono PIN', 'Wprowadzono dane pomyślnie');
-                  await Future.delayed(const Duration(milliseconds: 2000));
-                  Get.back();
-                } else {
-                  showErrorAlert(
-                      'Wprowadzono różne kody PIN', 'Spróbuj ponownie');
-                }
-              }
-            },
-            keyboardType: const TextInputType.numberWithOptions(
-                signed: false, decimal: false),
-            useHapticFeedback: true,
-            autoFocus: true,
-            autoUnfocus: true,
-            autoDismissKeyboard: true,
-            useExternalAutoFillGroup: false,
-            blinkWhenObscuring: false,
-            showCursor: false,
-            obscureText: true,
-            enableActiveFill: false,
-            enablePinAutofill: false,
-            obscuringWidget: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: Colors.black,
-              ),
-            ),
-            pinTheme: PinTheme(
-              shape: PinCodeFieldShape.circle,
-              fieldHeight: 50,
-              fieldWidth: 50,
-              fieldOuterPadding: const EdgeInsets.all(10),
-              borderWidth: 1,
-              inactiveColor: Colors.black26,
-              activeColor: Colors.black,
-              selectedColor: HexColor('1e4e82'),
-              activeFillColor: Colors.black,
-            ),
-            animationType: AnimationType.none,
-            animationDuration: const Duration(milliseconds: 0),
-          )
-        ],
-      ),
-    ),
-  );
+class LogoutPad extends StatefulWidget {
+  const LogoutPad({Key? key}) : super(key: key);
+
+  @override
+  State<LogoutPad> createState() => _LogoutPadState();
 }
 
-showFirstChangePinBar(context, user) async {
-  Get.snackbar(
-    '',
-    '',
-    margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-    animationDuration: const Duration(milliseconds: 800),
-    duration: const Duration(minutes: 2),
-    backgroundColor: Colors.white,
-    borderColor: Colors.black12,
-    borderWidth: 1,
-    overlayBlur: 2,
-    titleText: Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Text("Ustaw PIN", style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 20),
-          PinCodeTextField(
-            appContext: context,
-            length: 4,
-            onChanged: (String value) async {
-              if (value.length == 4) {
-                Get.back();
-                await _showSecondChangePinBar(context, user, value);
-              }
-            },
-            keyboardType: const TextInputType.numberWithOptions(
-                signed: false, decimal: false),
-            useHapticFeedback: true,
-            autoFocus: true,
-            autoUnfocus: true,
-            autoDismissKeyboard: false,
-            useExternalAutoFillGroup: false,
-            blinkWhenObscuring: false,
-            showCursor: false,
-            obscureText: true,
-            enableActiveFill: false,
-            enablePinAutofill: false,
-            obscuringWidget: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: Colors.black,
+class _LogoutPadState extends State<LogoutPad> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 196),
+              const Icon(
+                Iconsax.logout,
+                size: 100,
+                color: Colors.black54,
               ),
-            ),
-            pinTheme: PinTheme(
-              shape: PinCodeFieldShape.circle,
-              fieldHeight: 50,
-              fieldWidth: 50,
-              fieldOuterPadding: const EdgeInsets.all(10),
-              borderWidth: 1,
-              inactiveColor: Colors.black26,
-              activeColor: Colors.black,
-              selectedColor: HexColor('1e4e82'),
-              activeFillColor: Colors.black,
-            ),
-            animationType: AnimationType.fade,
-            animationDuration: const Duration(milliseconds: 100),
-          )
-        ],
-      ),
-    ),
-  );
-}
-
-showChangePinBar(context, user) async {
-  Get.snackbar(
-    '',
-    '',
-    margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-    animationDuration: const Duration(milliseconds: 800),
-    duration: const Duration(minutes: 2),
-    backgroundColor: Colors.white,
-    borderColor: Colors.black12,
-    borderWidth: 1,
-    overlayBlur: 2,
-    titleText: Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Text("Podaj PIN", style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 20),
-          PinCodeTextField(
-            appContext: context,
-            length: 4,
-            onChanged: (String value) async {
-              if (value.length == 4) {
-                Get.back();
-                if (value == user.pin!) {
-                  await showFirstChangePinBar(context, user);
-                } else {
-                  showErrorAlert('Błędny PIN', 'Spróbuj ponownie');
-                }
-              }
-            },
-            keyboardType: const TextInputType.numberWithOptions(
-                signed: false, decimal: false),
-            useHapticFeedback: true,
-            autoFocus: true,
-            autoUnfocus: true,
-            autoDismissKeyboard: false,
-            useExternalAutoFillGroup: false,
-            blinkWhenObscuring: false,
-            showCursor: false,
-            obscureText: true,
-            enableActiveFill: false,
-            enablePinAutofill: false,
-            obscuringWidget: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: Colors.black,
+              const SizedBox(height: 50),
+              Text(
+                "Podaj PIN",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.lato(
+                  textStyle: const TextStyle(
+                    color: Colors.black54,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ),
+                ),
               ),
-            ),
-            pinTheme: PinTheme(
-              shape: PinCodeFieldShape.circle,
-              fieldHeight: 50,
-              fieldWidth: 50,
-              fieldOuterPadding: const EdgeInsets.all(10),
-              borderWidth: 1,
-              inactiveColor: Colors.black26,
-              activeColor: Colors.black,
-              selectedColor: HexColor('1e4e82'),
-              activeFillColor: Colors.black,
-            ),
-            animationType: AnimationType.fade,
-            animationDuration: const Duration(milliseconds: 100),
-          )
-        ],
-      ),
-    ),
-  );
-}
-
-showLogoutBar(context, user) async {
-  Get.snackbar(
-    '',
-    '',
-    margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-    animationDuration: const Duration(milliseconds: 800),
-    duration: const Duration(minutes: 2),
-    backgroundColor: Colors.white,
-    borderColor: Colors.black26,
-    borderWidth: 1,
-    overlayBlur: 2,
-    titleText: Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Text("Podaj PIN", style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 20),
-          PinCodeTextField(
-            appContext: context,
-            length: 4,
-            onChanged: (String value) async {
-              if (value.length == 4) {
-                Get.back();
-                var loggedOut = false;
-                if (value == user.pin) {
-                  loggedOut = true;
-                }
-                if (loggedOut) {
-                  await Cache().deleteToken();
-                  showCompleteAlert('Wylogowano', 'Usunięto dane pomyślnie');
-                  await Future.delayed(const Duration(milliseconds: 2000));
-                  Get.offAll(
-                    () => const LoginPage(),
-                    transition: Transition.fadeIn,
-                    curve: Curves.ease,
-                    duration: const Duration(milliseconds: 1500),
-                  );
-                } else {
-                  showErrorAlert('Błędny PIN', 'Spróbuj ponownie');
-                }
-              }
-            },
-            keyboardType: const TextInputType.numberWithOptions(
-                signed: false, decimal: false),
-            useHapticFeedback: true,
-            autoFocus: true,
-            autoUnfocus: true,
-            autoDismissKeyboard: true,
-            useExternalAutoFillGroup: false,
-            blinkWhenObscuring: false,
-            showCursor: false,
-            obscureText: true,
-            enableActiveFill: false,
-            enablePinAutofill: false,
-            obscuringWidget: Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: Colors.black,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(80, 0, 80, 0),
+                child: PinCodeTextField(
+                  appContext: context,
+                  length: 4,
+                  onChanged: (String value) async {
+                    if (value.length == 4) {
+                      Get.back(result: value);
+                    }
+                  },
+                  keyboardType: const TextInputType.numberWithOptions(
+                      signed: false, decimal: false),
+                  useHapticFeedback: true,
+                  autoFocus: true,
+                  autoUnfocus: true,
+                  autoDismissKeyboard: true,
+                  useExternalAutoFillGroup: false,
+                  blinkWhenObscuring: false,
+                  showCursor: false,
+                  obscureText: true,
+                  enableActiveFill: false,
+                  enablePinAutofill: false,
+                  obscuringWidget: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: Colors.black,
+                    ),
+                  ),
+                  pinTheme: PinTheme(
+                    shape: PinCodeFieldShape.circle,
+                    fieldHeight: 30,
+                    fieldWidth: 30,
+                    fieldOuterPadding: const EdgeInsets.all(10),
+                    borderWidth: 1,
+                    inactiveColor: Colors.black26,
+                    activeColor: Colors.black,
+                    selectedColor: HexColor('1e4e82'),
+                    activeFillColor: Colors.black,
+                  ),
+                  animationType: AnimationType.none,
+                  animationDuration: const Duration(milliseconds: 0),
+                ),
               ),
-            ),
-            pinTheme: PinTheme(
-              shape: PinCodeFieldShape.circle,
-              fieldHeight: 50,
-              fieldWidth: 50,
-              fieldOuterPadding: const EdgeInsets.all(10),
-              borderWidth: 1,
-              inactiveColor: Colors.black26,
-              activeColor: Colors.black,
-              selectedColor: HexColor('1e4e82'),
-              activeFillColor: Colors.black,
-            ),
-            animationType: AnimationType.none,
-            animationDuration: const Duration(milliseconds: 0),
-          )
-        ],
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 showLoginIDScanner() async {

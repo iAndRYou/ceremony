@@ -13,6 +13,25 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:local_auth/local_auth.dart';
 
+Future<bool> authenticate() async {
+  try {
+    return await LocalAuthentication().authenticate(
+      localizedReason: 'Ceremony',
+      options: const AuthenticationOptions(
+        biometricOnly: true,
+        useErrorDialogs: true,
+        stickyAuth: false,
+      ),
+    );
+  } on PlatformException {
+    return false;
+  }
+}
+
+Future loginUser() async {}
+
+Future setupUser() async {}
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -42,21 +61,6 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     getWelcome();
-  }
-
-  Future<bool> authenticate() async {
-    try {
-      return await LocalAuthentication().authenticate(
-        localizedReason: 'Ceremony',
-        options: const AuthenticationOptions(
-          biometricOnly: true,
-          useErrorDialogs: true,
-          stickyAuth: false,
-        ),
-      );
-    } on PlatformException {
-      return false;
-    }
   }
 
   @override
@@ -130,8 +134,26 @@ class _LoginPageState extends State<LoginPage> {
                     var valid = await user.valid();
                     var stamp = await TimeNow().getStamp();
                     if (user.pin == '0') {
-                      // ignore: use_build_context_synchronously
-                      await showFirstPinBar(context, user);
+                      var newPin = await Get.to(
+                        () => const ChangePinPad(
+                          prompt: "Ustaw PIN",
+                        ),
+                        transition: Transition.fadeIn,
+                        duration: const Duration(milliseconds: 600),
+                      );
+                      await Future.delayed(const Duration(milliseconds: 700));
+                      var changedPin = await Get.to(
+                        () => const ChangePinPad(
+                          prompt: "Powtórz PIN",
+                        ),
+                        transition: Transition.fadeIn,
+                        duration: const Duration(milliseconds: 600),
+                      );
+                      if (changedPin == newPin) {
+                        user.pin = changedPin;
+                        Cache().setToken(user.toToken());
+                        await Future.delayed(const Duration(milliseconds: 700));
+                      }
                     } else {
                       var ifSecureLogin = await Cache().ifSecureLogin();
                       if (!ifSecureLogin) {
@@ -197,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                   await Cache().setToken(token);
                   var availability = await FlutterNfcKit.nfcAvailability;
                   if (availability == NFCAvailability.not_supported) {
-                    showErrorAlert('NFC', 'Brak dostępu do modułu NFC');
+                    showErrorAlert('Błąd NFC', 'Brak modułu NFC');
                   } else {
                     var tag = await FlutterNfcKit.poll(
                         timeout: const Duration(seconds: 10),
