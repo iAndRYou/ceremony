@@ -74,7 +74,7 @@ class _PinPadState extends State<PinPad> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               SvgPicture.asset(
                 'lib/assets/cer.svg',
                 width: 200,
@@ -135,7 +135,7 @@ class _PinPadState extends State<PinPad> {
                   animationDuration: const Duration(milliseconds: 0),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -194,7 +194,7 @@ class _ChangePinPadState extends State<ChangePinPad> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 196),
+              const SizedBox(height: 176),
               const Icon(
                 Iconsax.edit,
                 size: 100,
@@ -257,7 +257,7 @@ class _ChangePinPadState extends State<ChangePinPad> {
                   animationDuration: const Duration(milliseconds: 0),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
             ],
           ),
         ),
@@ -309,7 +309,7 @@ class _LogoutPadState extends State<LogoutPad> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 196),
+              const SizedBox(height: 176),
               const Icon(
                 Iconsax.logout,
                 size: 100,
@@ -372,7 +372,7 @@ class _LogoutPadState extends State<LogoutPad> {
                   animationDuration: const Duration(milliseconds: 0),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
             ],
           ),
         ),

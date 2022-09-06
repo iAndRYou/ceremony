@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               SvgPicture.asset(
                 'lib/assets/cer.svg',
                 width: 200,

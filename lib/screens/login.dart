@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               SvgPicture.asset(
                 'lib/assets/cer.svg',
                 width: 200,
@@ -117,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 90),
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   primary: Colors.white,
