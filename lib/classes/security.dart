@@ -1,7 +1,16 @@
 import 'dart:math';
-import 'package:encrypt/encrypt.dart';
+import 'package:ceremony/classes/preferences.dart';
+import 'package:ceremony/classes/sheets.dart';
+import 'package:ceremony/classes/user.dart';
+import 'package:encrypt/encrypt.dart' as en;
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:ntp/ntp.dart';
+
+import '../navigation.dart';
 
 List<String> keys = [
   '4t7w!z%C*F)J@NcRfUjXn2r5u8x/A?D(',
@@ -18,17 +27,18 @@ List<String> keys = [
 
 String encrypt(String id) {
   int index = Random.secure().nextInt(10);
-  final key = Key.fromUtf8(keys[index]);
-  final iv = IV.fromLength(16);
-  return Encrypter(AES(key)).encrypt(id, iv: iv).base64 + index.toString();
+  final key = en.Key.fromUtf8(keys[index]);
+  final iv = en.IV.fromLength(16);
+  return en.Encrypter(en.AES(key)).encrypt(id, iv: iv).base64 +
+      index.toString();
 }
 
 String decrypt(String id) {
   int index = int.parse(id.substring(id.length - 1));
   id = id.replaceRange(id.length - 1, id.length, '');
-  final key = Key.fromUtf8(keys[index]);
-  final iv = IV.fromLength(16);
-  String decrypted = Encrypter(AES(key)).decrypt64(id, iv: iv);
+  final key = en.Key.fromUtf8(keys[index]);
+  final iv = en.IV.fromLength(16);
+  String decrypted = en.Encrypter(en.AES(key)).decrypt64(id, iv: iv);
   return decrypted;
 }
 
@@ -38,3 +48,131 @@ class TimeNow {
     return "${DateFormat('dd.MM.yyyy').format(now)}   ${DateFormat('HH:mm').format(now)}";
   }
 }
+
+Future<bool> authenticate() async {
+  try {
+    return await LocalAuthentication().authenticate(
+      localizedReason: 'Ceremony',
+      options: const AuthenticationOptions(
+        biometricOnly: true,
+        useErrorDialogs: true,
+        stickyAuth: false,
+      ),
+    );
+  } on PlatformException {
+    return false;
+  }
+}
+
+Future loginUser() async {
+  var token = await Cache().getToken();
+  var user = User.fromToken(token);
+  var valid = await user.valid();
+  var stamp = await TimeNow().getStamp();
+  if (user.pin == '0') {
+    var newPin = await Get.to(
+      () => const ChangePinPad(
+        prompt: "Ustaw PIN",
+      ),
+      transition: Transition.fadeIn,
+      duration: const Duration(milliseconds: 600),
+    );
+    await Future.delayed(const Duration(milliseconds: 700));
+    var changedPin = await Get.to(
+      () => const ChangePinPad(
+        prompt: "Powtórz PIN",
+      ),
+      transition: Transition.fadeIn,
+      duration: const Duration(milliseconds: 600),
+    );
+    if (changedPin == newPin) {
+      user.pin = changedPin;
+      Cache().setToken(user.toToken());
+      await Future.delayed(const Duration(milliseconds: 700));
+    }
+  } else {
+    var ifSecureLogin = await Cache().ifSecureLogin();
+    if (ifSecureLogin) {
+      authenticate().then((authenticated) async {
+        if (authenticated) {
+          await Future.delayed(const Duration(milliseconds: 500));
+          Get.offAll(
+            () => Navigate(0, user, valid, stamp),
+            transition: Transition.fadeIn,
+            curve: Curves.ease,
+            duration: const Duration(milliseconds: 1000),
+          );
+        }
+      });
+    } else {
+      // ignore: unused_local_variable
+      var enteredPin = await Get.to(
+        () => const PinPad(),
+        transition: Transition.fadeIn,
+        duration: const Duration(milliseconds: 600),
+      );
+      if (enteredPin == user.pin) {
+        await Future.delayed(const Duration(milliseconds: 700));
+        Get.offAll(
+          () => Navigate(0, user, valid, stamp),
+          transition: Transition.fadeIn,
+          curve: Curves.ease,
+          duration: const Duration(milliseconds: 1000),
+        );
+      } else {
+        if (enteredPin != null) {
+          await Future.delayed(const Duration(milliseconds: 700));
+          showErrorAlert("Błędny PIN", "Spróbuj ponownie");
+        }
+      }
+    }
+  }
+}
+
+Future changePIN() async {
+  var token = await Cache().getToken();
+  var user = User.fromToken(token);
+  var enteredPin = await Get.to(
+    () => const ChangePinPad(
+      prompt: "Podaj PIN",
+    ),
+    transition: Transition.noTransition,
+    duration: const Duration(milliseconds: 600),
+  );
+  if (enteredPin == user.pin) {
+    var newPin = await Get.to(
+      () => const ChangePinPad(
+        prompt: "Ustaw PIN",
+      ),
+      transition: Transition.noTransition,
+      duration: const Duration(milliseconds: 600),
+    );
+    if (newPin != null) {
+      var changedPin = await Get.to(
+        () => const ChangePinPad(
+          prompt: "Powtórz PIN",
+        ),
+        transition: Transition.noTransition,
+        duration: const Duration(milliseconds: 600),
+      );
+      if (changedPin == newPin) {
+        user.pin = changedPin;
+        Cache().setToken(user.toToken());
+        await Future.delayed(const Duration(milliseconds: 700));
+        showCompleteAlert("Zmieniono PIN", "Poprawnie zmieniono dane");
+      } else {
+        if (changedPin != null) {
+          await Future.delayed(const Duration(milliseconds: 700));
+          showErrorAlert("Błędny PIN", "Podano różne kody PIN");
+        }
+      }
+    } else {}
+  } else {
+    if (enteredPin != null) {
+      await Future.delayed(const Duration(milliseconds: 700));
+      showErrorAlert("Błędny PIN", "Spróbuj ponownie");
+    }
+  }
+}
+
+Future setupUser() async {}

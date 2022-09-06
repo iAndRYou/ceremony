@@ -3,34 +3,11 @@ import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/security.dart';
 import 'package:ceremony/classes/sheets.dart';
 import 'package:ceremony/classes/user.dart';
-import 'package:ceremony/navigation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:local_auth/local_auth.dart';
-
-Future<bool> authenticate() async {
-  try {
-    return await LocalAuthentication().authenticate(
-      localizedReason: 'Ceremony',
-      options: const AuthenticationOptions(
-        biometricOnly: true,
-        useErrorDialogs: true,
-        stickyAuth: false,
-      ),
-    );
-  } on PlatformException {
-    return false;
-  }
-}
-
-Future loginUser() async {}
-
-Future setupUser() async {}
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -129,71 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   var hasToken = await Cache().hasToken();
                   if (hasToken) {
-                    var token = await Cache().getToken();
-                    var user = User.fromToken(token);
-                    var valid = await user.valid();
-                    var stamp = await TimeNow().getStamp();
-                    if (user.pin == '0') {
-                      var newPin = await Get.to(
-                        () => const ChangePinPad(
-                          prompt: "Ustaw PIN",
-                        ),
-                        transition: Transition.fadeIn,
-                        duration: const Duration(milliseconds: 600),
-                      );
-                      await Future.delayed(const Duration(milliseconds: 700));
-                      var changedPin = await Get.to(
-                        () => const ChangePinPad(
-                          prompt: "Powtórz PIN",
-                        ),
-                        transition: Transition.fadeIn,
-                        duration: const Duration(milliseconds: 600),
-                      );
-                      if (changedPin == newPin) {
-                        user.pin = changedPin;
-                        Cache().setToken(user.toToken());
-                        await Future.delayed(const Duration(milliseconds: 700));
-                      }
-                    } else {
-                      var ifSecureLogin = await Cache().ifSecureLogin();
-                      if (!ifSecureLogin) {
-                        authenticate().then((authenticated) async {
-                          if (authenticated) {
-                            await Future.delayed(
-                                const Duration(milliseconds: 500));
-                            Get.offAll(
-                              () => Navigate(0, user, valid, stamp),
-                              transition: Transition.fadeIn,
-                              curve: Curves.ease,
-                              duration: const Duration(milliseconds: 1000),
-                            );
-                          }
-                        });
-                      } else {
-                        // ignore: unused_local_variable
-                        var enteredPin = await Get.to(
-                          () => const PinPad(),
-                          transition: Transition.fadeIn,
-                          duration: const Duration(milliseconds: 600),
-                        );
-                        if (enteredPin == user.pin) {
-                          await Future.delayed(
-                              const Duration(milliseconds: 700));
-                          Get.offAll(
-                            () => Navigate(0, user, valid, stamp),
-                            transition: Transition.fadeIn,
-                            curve: Curves.ease,
-                            duration: const Duration(milliseconds: 1000),
-                          );
-                        } else {
-                          if (enteredPin != null) {
-                            await Future.delayed(
-                                const Duration(milliseconds: 700));
-                            showErrorAlert("Błędny PIN", "Spróbuj ponownie");
-                          }
-                        }
-                      }
-                    }
+                    await loginUser();
                   } else {
                     var availability = await FlutterNfcKit.nfcAvailability;
                     if (availability == NFCAvailability.not_supported) {

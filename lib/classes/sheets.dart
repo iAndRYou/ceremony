@@ -1,8 +1,3 @@
-import 'package:ceremony/classes/preferences.dart';
-import 'package:ceremony/classes/security.dart';
-import 'package:ceremony/classes/user.dart';
-import 'package:ceremony/navigation.dart';
-import 'package:ceremony/screens/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
