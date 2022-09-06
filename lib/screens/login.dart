@@ -127,14 +127,14 @@ class _LoginPageState extends State<LoginPage> {
                   if (hasToken) {
                     var token = await Cache().getToken();
                     var user = User.fromToken(token);
+                    var valid = await user.valid();
+                    var stamp = await TimeNow().getStamp();
                     if (user.pin == '0') {
                       // ignore: use_build_context_synchronously
                       await showFirstPinBar(context, user);
                     } else {
                       var ifSecureLogin = await Cache().ifSecureLogin();
-                      if (ifSecureLogin) {
-                        var valid = await user.valid();
-                        var stamp = await TimeNow().getStamp();
+                      if (!ifSecureLogin) {
                         authenticate().then((authenticated) async {
                           if (authenticated) {
                             await Future.delayed(
@@ -148,8 +148,28 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         });
                       } else {
-                        // ignore: use_build_context_synchronously
-                        await showPinBar(context, user);
+                        // ignore: unused_local_variable
+                        var enteredPin = await Get.to(
+                          () => const PinPad(),
+                          transition: Transition.fadeIn,
+                          duration: const Duration(milliseconds: 600),
+                        );
+                        if (enteredPin == user.pin) {
+                          await Future.delayed(
+                              const Duration(milliseconds: 700));
+                          Get.offAll(
+                            () => Navigate(0, user, valid, stamp),
+                            transition: Transition.fadeIn,
+                            curve: Curves.ease,
+                            duration: const Duration(milliseconds: 1000),
+                          );
+                        } else {
+                          if (enteredPin != null) {
+                            await Future.delayed(
+                                const Duration(milliseconds: 700));
+                            showErrorAlert("Błędny PIN", "Spróbuj ponownie");
+                          }
+                        }
                       }
                     }
                   } else {
@@ -180,9 +200,9 @@ class _LoginPageState extends State<LoginPage> {
                     showErrorAlert('NFC', 'Brak dostępu do modułu NFC');
                   } else {
                     var tag = await FlutterNfcKit.poll(
-                        timeout: Duration(seconds: 10),
-                        iosMultipleTagMessage: "Multiple tags found!",
-                        iosAlertMessage: "Scan your tag");
+                        timeout: const Duration(seconds: 10),
+                        iosMultipleTagMessage: "Wykryto wiele kart",
+                        iosAlertMessage: "Zbliż e-Legitymację");
                   }
                 },
                 child: const Icon(
