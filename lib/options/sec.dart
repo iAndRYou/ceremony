@@ -1,12 +1,9 @@
 import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/security.dart';
-import 'package:ceremony/classes/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-
-import '../classes/sheets.dart';
 
 class SecurityOptions extends StatefulWidget {
   const SecurityOptions({Key? key}) : super(key: key);

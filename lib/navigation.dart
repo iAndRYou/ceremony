@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ceremony/classes/user.dart';
 import 'package:flutter/material.dart';
 import 'package:ceremony/screens/profile.dart';
@@ -26,22 +28,25 @@ class _NavigateState extends State<Navigate> {
   _NavigateState(this.index, this.user, this.valid, this.stamp);
 
   @override
-  initState() {
-    user.valid().then((value) {
-      if (mounted) {
-        setState(() {
-          valid = value;
-        });
-      }
-    });
-    TimeNow().getStamp().then((value) {
-      if (mounted) {
-        setState(() {
-          stamp = value;
-        });
-      }
-    });
+  void initState() {
     super.initState();
+    Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) async {
+        var refreshedStamp = await TimeNow().getStamp();
+        if (mounted) {
+          setState(() {
+            stamp = refreshedStamp;
+          });
+        }
+        var refreshedValid = await user.valid();
+        if (mounted) {
+          setState(() {
+            valid = refreshedValid;
+          });
+        }
+      },
+    );
   }
 
   @override
