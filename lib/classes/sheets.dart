@@ -67,7 +67,9 @@ class _PinPadState extends State<PinPad> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(),
+      appBar: AppBar(
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Center(
@@ -92,7 +94,7 @@ class _PinPadState extends State<PinPad> {
               ),
               const SizedBox(height: 5),
               Padding(
-                padding: const EdgeInsets.fromLTRB(110, 0, 110, 0),
+                padding: const EdgeInsets.fromLTRB(100, 0, 100, 0),
                 child: PinCodeTextField(
                   appContext: context,
                   length: 4,
@@ -147,46 +149,51 @@ class _PinPadState extends State<PinPad> {
 
 class ChangePinPad extends StatefulWidget {
   final String prompt;
+  final String title;
   const ChangePinPad({
     Key? key,
+    required this.title,
     required this.prompt,
   }) : super(key: key);
 
   @override
   // ignore: no_logic_in_create_state
-  State<ChangePinPad> createState() => _ChangePinPadState(prompt);
+  State<ChangePinPad> createState() => _ChangePinPadState(title, prompt);
 }
 
 class _ChangePinPadState extends State<ChangePinPad> {
+  String title;
   String prompt;
-  _ChangePinPadState(this.prompt);
+  _ChangePinPadState(this.title, this.prompt);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        leading: TextButton(
+        elevation: 0,
+        centerTitle: true,
+        leading: OutlinedButton(
           style: OutlinedButton.styleFrom(
             primary: Colors.white,
             side: const BorderSide(
               color: Colors.white,
             ),
             elevation: 0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(1500)),
           ),
           onPressed: () async {
-            Get.back(result: null);
+            Get.back();
           },
-          child: Text(
-            "Anuluj",
-            textAlign: TextAlign.left,
-            style: GoogleFonts.lato(
-              textStyle: TextStyle(
-                color: HexColor('1e4e82'),
-                fontWeight: FontWeight.w700,
-                fontSize: 13,
-              ),
-            ),
+          child: const Icon(
+            Iconsax.arrow_left_2,
+            size: 30,
+            color: Colors.black87,
           ),
+        ),
+        title: Text(
+          title,
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
       ),
       body: Padding(
@@ -215,7 +222,7 @@ class _ChangePinPadState extends State<ChangePinPad> {
               ),
               const SizedBox(height: 5),
               Padding(
-                padding: const EdgeInsets.fromLTRB(110, 0, 110, 0),
+                padding: const EdgeInsets.fromLTRB(100, 0, 100, 0),
                 child: PinCodeTextField(
                   appContext: context,
                   length: 4,
@@ -331,7 +338,7 @@ class _LogoutPadState extends State<LogoutPad> {
               ),
               const SizedBox(height: 5),
               Padding(
-                padding: const EdgeInsets.fromLTRB(110, 0, 110, 0),
+                padding: const EdgeInsets.fromLTRB(100, 0, 100, 0),
                 child: PinCodeTextField(
                   appContext: context,
                   length: 4,
