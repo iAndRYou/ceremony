@@ -73,24 +73,28 @@ Future loginUser() async {
   if (user.pin == '0') {
     var newPin = await Get.to(
       () => const ChangePinPad(
+        title: "Ustaw PIN",
         prompt: "Ustaw PIN",
       ),
-      transition: Transition.fadeIn,
+      transition: Transition.noTransition,
       duration: const Duration(milliseconds: 600),
     );
-    await Future.delayed(const Duration(milliseconds: 700));
-    var changedPin = await Get.to(
-      () => const ChangePinPad(
-        prompt: "Powtórz PIN",
-      ),
-      transition: Transition.fadeIn,
-      duration: const Duration(milliseconds: 600),
-    );
-    if (changedPin == newPin) {
-      user.pin = changedPin;
-      Cache().setToken(user.toToken());
-      await Future.delayed(const Duration(milliseconds: 700));
-    }
+    if (newPin != null && newPin.length == 4) {
+      await Future.delayed(const Duration(milliseconds: 200));
+      var changedPin = await Get.to(
+        () => const ChangePinPad(
+          title: "Powtórz PIN",
+          prompt: "Powtórz PIN",
+        ),
+        transition: Transition.noTransition,
+        duration: const Duration(milliseconds: 600),
+      );
+      if (changedPin == newPin) {
+        user.pin = changedPin;
+        Cache().setToken(user.toToken());
+        await Future.delayed(const Duration(milliseconds: 700));
+      }
+    } else {}
   } else {
     var ifSecureLogin = await Cache().ifSecureLogin();
     if (ifSecureLogin) {
@@ -159,6 +163,7 @@ Future changePIN() async {
   var user = User.fromToken(token);
   var enteredPin = await Get.to(
     () => const ChangePinPad(
+      title: "Zmiana PIN",
       prompt: "Podaj PIN",
     ),
     transition: Transition.noTransition,
@@ -167,6 +172,7 @@ Future changePIN() async {
   if (enteredPin == user.pin) {
     var newPin = await Get.to(
       () => const ChangePinPad(
+        title: "Zmiana PIN",
         prompt: "Ustaw PIN",
       ),
       transition: Transition.noTransition,
@@ -175,6 +181,7 @@ Future changePIN() async {
     if (newPin != null) {
       var changedPin = await Get.to(
         () => const ChangePinPad(
+          title: "Zmiana PIN",
           prompt: "Powtórz PIN",
         ),
         transition: Transition.noTransition,
