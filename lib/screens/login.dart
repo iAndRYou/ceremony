@@ -151,6 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                       size: 50,
                       color: Colors.black26,
                     ),
+                    const SizedBox(height: 5),
                     Text(
                       "Skanuj e-Legitymację",
                       style: GoogleFonts.lato(
