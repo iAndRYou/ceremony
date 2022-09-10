@@ -110,9 +110,11 @@ class _LoginPageState extends State<LoginPage> {
                   } else {
                     var availability = await FlutterNfcKit.nfcAvailability;
                     if (availability == NFCAvailability.not_supported) {
-                      showErrorAlert('NFC', 'Brak dostępu do modułu NFC');
+                      showErrorAlert('NFC', 'Brak modułu NFC');
+                    } else if (availability == NFCAvailability.disabled) {
+                      showErrorAlert('Błąd NFC', 'NFC wyłączone');
                     } else {
-                      await showLoginIDScanner();
+                      setupUser();
                     }
                   }
                 },
@@ -132,9 +134,14 @@ class _LoginPageState extends State<LoginPage> {
                   await Cache().setToken(token);
                   var availability = await FlutterNfcKit.nfcAvailability;
                   if (availability == NFCAvailability.not_supported) {
-                    showErrorAlert('Błąd NFC', 'Brak modułu NFC');
+                    showErrorAlert('NFC', 'Brak modułu NFC');
+                  } else if (availability == NFCAvailability.disabled) {
+                    showErrorAlert('Błąd NFC', 'NFC wyłączone');
                   } else {
-                    await writeToken(User.fromToken(token));
+                    var gotToken = await readToken();
+                    if (gotToken != null) {
+                      await showDocumentScanned(gotToken);
+                    }
                   }
                 },
                 child: const Icon(
