@@ -73,15 +73,15 @@ Future writeToken(User user) async {
       iosMultipleTagMessage: "Wykryto wiele kart",
       iosAlertMessage: "Zbliż e-Legitymację");
 
-  if (!tag.ndefWritable!) {
+  if (tag.ndefWritable == false) {
     await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
   } else {
     await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
     await Future.delayed(const Duration(milliseconds: 500));
+    var message = [user.toToken(), encrypt(tag.id.toString())].join("/check/");
     try {
       await FlutterNfcKit.writeNDEFRecords([
-        ndef.UriRecord(content: user.toToken()),
-        ndef.UriRecord(content: tag.id.toString())
+        ndef.UriRecord.fromString(message),
       ]);
 
       await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
@@ -112,11 +112,12 @@ Future updateToken(User user) async {
     await Future.delayed(const Duration(milliseconds: 500));
     try {
       var data = await FlutterNfcKit.readNDEFRecords();
-      if (checkToken(data[0].toString()) &&
-          decrypt(data[1].toString()) == tag.id.toString()) {
+      var token = data[0].toString().split("/check/")[0];
+      var identity = data[0].toString().split("/check/")[1];
+      if (checkToken(token) && decrypt(identity) == tag.id.toString()) {
         await FlutterNfcKit.writeNDEFRecords([
-          ndef.UriRecord(content: user.toToken()),
-          ndef.UriRecord(content: tag.id.toString())
+          ndef.TextRecord(text: user.toToken()),
+          ndef.TextRecord(text: tag.id.toString()),
         ]);
         await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
         await Future.delayed(const Duration(milliseconds: 500));
@@ -144,22 +145,22 @@ Future<String?> readToken() async {
       iosMultipleTagMessage: "Wykryto wiele kart",
       iosAlertMessage: "Zbliż e-Legitymację");
 
-  if (!tag.ndefWritable!) {
+  if (tag.ndefWritable == false) {
     await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
   } else {
     await FlutterNfcKit.setIosAlertMessage("Pobieranie danych");
     await Future.delayed(const Duration(milliseconds: 500));
     try {
-      var data = await FlutterNfcKit.readNDEFRecords();
-      if (checkToken(data[0].toString()) &&
-          decrypt(data[1].toString()) == tag.id.toString()) {
-        await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
-        await Future.delayed(const Duration(milliseconds: 500));
+      var data = await FlutterNfcKit.readNDEFRecords(cached: false);
+      var identity = data[0].toString().split("/check/")[1];
+      var token = data[0].toString().split("/check/")[0].split("uri=")[1];
+      await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
+      await Future.delayed(const Duration(milliseconds: 500));
+      if (tag.id.toString() == decrypt(identity) && checkToken(token)) {
         await FlutterNfcKit.finish(iosAlertMessage: "Odczytano dane");
-        return data[0].toString();
+        return token;
       } else {
         await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
-        return null;
       }
     } catch (e) {
       await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
@@ -188,7 +189,6 @@ Future loginUser() async {
   var token = await Cache().getToken();
   var user = User.fromToken(token);
   var valid = await user.valid();
-  var stamp = await TimeNow().getStamp();
   if (user.pin == '0') {
     var newPin = await Get.to(
       () => const ChangePinPad(
@@ -221,7 +221,7 @@ Future loginUser() async {
         if (authenticated) {
           await Future.delayed(const Duration(milliseconds: 500));
           Get.offAll(
-            () => Navigate(0, user, valid, stamp),
+            () => Navigate(0, user, valid),
             transition: Transition.fadeIn,
             curve: Curves.ease,
             duration: const Duration(milliseconds: 1000),
@@ -238,7 +238,7 @@ Future loginUser() async {
       if (enteredPin == user.pin) {
         await Future.delayed(const Duration(milliseconds: 700));
         Get.offAll(
-          () => Navigate(0, user, valid, stamp),
+          () => Navigate(0, user, valid),
           transition: Transition.fadeIn,
           curve: Curves.ease,
           duration: const Duration(milliseconds: 1000),

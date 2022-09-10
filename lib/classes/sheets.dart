@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:ceremony/classes/security.dart';
 import 'package:ceremony/classes/user.dart';
 import 'package:ceremony/classes/widgets.dart';
 import 'package:flutter/cupertino.dart';
@@ -393,14 +396,62 @@ class _LogoutPadState extends State<LogoutPad> {
   }
 }
 
+class Stamp extends StatefulWidget {
+  const Stamp({Key? key}) : super(key: key);
+
+  @override
+  State<Stamp> createState() => _StampState();
+}
+
+class _StampState extends State<Stamp> {
+  String stamp = "";
+
+  @override
+  void initState() {
+    super.initState();
+    var refreshedStamp = "";
+    Timer.periodic(
+      const Duration(milliseconds: 10),
+      (timer) async {
+        refreshedStamp = await TimeNow().getStamp();
+        if (mounted) {
+          setState(() {
+            stamp = refreshedStamp;
+          });
+        }
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "Stan na dzień:   $stamp",
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.bodyMedium,
+    );
+  }
+}
+
 showDocumentScanned(String token) async {
   var user = User.fromToken(token);
   var valid = await user.valid();
+  await Future.delayed(const Duration(seconds: 3));
   Get.bottomSheet(
     Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Column(
-        children: [Document(user, valid)],
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+            child: Icon(
+              Iconsax.arrow_down_1,
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
+          Document(user, valid),
+        ],
       ),
     ),
     shape: RoundedRectangleBorder(
@@ -411,7 +462,7 @@ showDocumentScanned(String token) async {
     isDismissible: true,
     enableDrag: true,
     isScrollControlled: false,
-    enterBottomSheetDuration: const Duration(milliseconds: 300),
-    exitBottomSheetDuration: const Duration(milliseconds: 300),
+    enterBottomSheetDuration: const Duration(milliseconds: 400),
+    exitBottomSheetDuration: const Duration(milliseconds: 400),
   );
 }

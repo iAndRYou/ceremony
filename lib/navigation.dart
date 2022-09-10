@@ -5,27 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:ceremony/screens/profile.dart';
 import 'package:ceremony/screens/home.dart';
 import 'package:iconsax/iconsax.dart';
-import 'classes/security.dart';
 
 class Navigate extends StatefulWidget {
   final int index;
   final User user;
   final bool valid;
-  final String stamp;
-  const Navigate(this.index, this.user, this.valid, this.stamp, {Key? key})
+  const Navigate(this.index, this.user, this.valid, {Key? key})
       : super(key: key);
 
   @override
   // ignore: no_logic_in_create_state
-  State<Navigate> createState() => _NavigateState(index, user, valid, stamp);
+  State<Navigate> createState() => _NavigateState(index, user, valid);
 }
 
 class _NavigateState extends State<Navigate> {
   int index;
   User user;
   bool valid;
-  String stamp;
-  _NavigateState(this.index, this.user, this.valid, this.stamp);
+  _NavigateState(this.index, this.user, this.valid);
 
   @override
   void initState() {
@@ -33,12 +30,6 @@ class _NavigateState extends State<Navigate> {
     Timer.periodic(
       const Duration(seconds: 1),
       (timer) async {
-        var refreshedStamp = await TimeNow().getStamp();
-        if (mounted) {
-          setState(() {
-            stamp = refreshedStamp;
-          });
-        }
         var refreshedValid = await user.valid();
         if (mounted) {
           setState(() {
@@ -52,7 +43,7 @@ class _NavigateState extends State<Navigate> {
   @override
   Widget build(BuildContext context) {
     var navigate = [
-      HomePage(user, valid, stamp),
+      HomePage(user, valid),
       ProfilePage(user),
     ];
 

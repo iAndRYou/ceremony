@@ -106,6 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   var hasToken = await Cache().hasToken();
                   if (hasToken) {
+                    await writeToken(User.fromToken(token));
                     await loginUser();
                   } else {
                     var availability = await FlutterNfcKit.nfcAvailability;
@@ -114,24 +115,23 @@ class _LoginPageState extends State<LoginPage> {
                     } else if (availability == NFCAvailability.disabled) {
                       showErrorAlert('Błąd NFC', 'NFC wyłączone');
                     } else {
-                      setupUser();
+                      await writeToken(User.fromToken(hasToken));
                     }
                   }
                 },
               ),
-              const SizedBox(height: 90),
+              const SizedBox(height: 80),
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   primary: Colors.white,
                   side: const BorderSide(
-                    color: Colors.white,
+                    color: Colors.transparent,
                   ),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(1500)),
                 ),
                 onPressed: () async {
-                  await Cache().setToken(token);
                   var availability = await FlutterNfcKit.nfcAvailability;
                   if (availability == NFCAvailability.not_supported) {
                     showErrorAlert('NFC', 'Brak modułu NFC');
@@ -144,10 +144,24 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   }
                 },
-                child: const Icon(
-                  Iconsax.mirroring_screen,
-                  size: 50,
-                  color: Colors.black26,
+                child: Column(
+                  children: [
+                    const Icon(
+                      Iconsax.mirroring_screen,
+                      size: 50,
+                      color: Colors.black26,
+                    ),
+                    Text(
+                      "Skanuj dokument",
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                          color: Colors.black26,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 50),
