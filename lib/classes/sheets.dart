@@ -1,3 +1,5 @@
+import 'package:ceremony/classes/user.dart';
+import 'package:ceremony/classes/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -391,17 +393,21 @@ class _LogoutPadState extends State<LogoutPad> {
   }
 }
 
-showLoginIDScanner() async {
+showDocumentScanned(String token) async {
+  var user = User.fromToken(token);
+  var valid = await user.valid();
   Get.bottomSheet(
     Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-      child: Column(),
+      child: Column(
+        children: [Document(user, valid)],
+      ),
     ),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(15),
     ),
     elevation: 50,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.transparent,
     isDismissible: true,
     enableDrag: true,
     isScrollControlled: false,
