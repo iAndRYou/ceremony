@@ -3,8 +3,10 @@ import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/sheets.dart';
 import 'package:ceremony/classes/user.dart';
 import 'package:encrypt/encrypt.dart' as en;
+import 'package:ndef/ndef.dart' as ndef;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:local_auth/local_auth.dart';
@@ -203,6 +205,46 @@ Future changePIN() async {
     if (enteredPin != null) {
       await Future.delayed(const Duration(milliseconds: 700));
       showErrorAlert("Błędny PIN", "Spróbuj ponownie");
+    }
+  }
+}
+
+bool checkToken(String token) {
+  var realData = decrypt(token).split("+");
+  if (realData[0] == "CRMNY") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+Future writeToken(User user) async {
+  var tag = await FlutterNfcKit.poll(
+      timeout: const Duration(seconds: 10),
+      androidPlatformSound: false,
+      readIso14443A: true,
+      readIso14443B: true,
+      readIso15693: false,
+      readIso18092: false,
+      probeWebUSBMagic: false,
+      iosMultipleTagMessage: "Wykryto wiele kart",
+      iosAlertMessage: "Zbliż e-Legitymację");
+
+  if (!tag.ndefWritable!) {
+    await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+  } else {
+    await FlutterNfcKit.setIosAlertMessage("Pobieranie danych");
+    Future.delayed(const Duration(seconds: 1));
+    var data = await FlutterNfcKit.readNDEFRecords(cached: true);
+    if (checkToken(data[0].toString()) &&
+        decrypt(data[1].toString()) == tag.id.toString()) {
+      await FlutterNfcKit.writeNDEFRecords([
+        ndef.UriRecord(content: user.toToken()),
+        ndef.UriRecord(content: tag.id.toString())
+      ]);
+      await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
+    } else {
+      await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
     }
   }
 }
