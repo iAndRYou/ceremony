@@ -152,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.black26,
                     ),
                     Text(
-                      "Skanuj dokument",
+                      "Skanuj e-Legitymację",
                       style: GoogleFonts.lato(
                         textStyle: const TextStyle(
                           color: Colors.black26,
