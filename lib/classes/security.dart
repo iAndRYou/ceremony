@@ -52,6 +52,123 @@ class TimeNow {
   }
 }
 
+bool checkToken(String token) {
+  var realData = decrypt(token).split("+");
+  if (realData[0] == "CRMNY") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+Future writeToken(User user) async {
+  var tag = await FlutterNfcKit.poll(
+      timeout: const Duration(seconds: 10),
+      androidPlatformSound: false,
+      readIso14443A: true,
+      readIso14443B: true,
+      readIso15693: false,
+      readIso18092: false,
+      probeWebUSBMagic: false,
+      iosMultipleTagMessage: "Wykryto wiele kart",
+      iosAlertMessage: "Zbliż e-Legitymację");
+
+  if (!tag.ndefWritable!) {
+    await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+  } else {
+    await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
+    await Future.delayed(const Duration(milliseconds: 500));
+    try {
+      await FlutterNfcKit.writeNDEFRecords([
+        ndef.UriRecord(content: user.toToken()),
+        ndef.UriRecord(content: tag.id.toString())
+      ]);
+
+      await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
+      await Future.delayed(const Duration(milliseconds: 500));
+      await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
+    } catch (e) {
+      await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+    }
+  }
+}
+
+Future updateToken(User user) async {
+  var tag = await FlutterNfcKit.poll(
+      timeout: const Duration(seconds: 10),
+      androidPlatformSound: false,
+      readIso14443A: true,
+      readIso14443B: true,
+      readIso15693: false,
+      readIso18092: false,
+      probeWebUSBMagic: false,
+      iosMultipleTagMessage: "Wykryto wiele kart",
+      iosAlertMessage: "Zbliż e-Legitymację");
+
+  if (!tag.ndefWritable!) {
+    await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+  } else {
+    await FlutterNfcKit.setIosAlertMessage("Pobieranie danych");
+    await Future.delayed(const Duration(milliseconds: 500));
+    try {
+      var data = await FlutterNfcKit.readNDEFRecords();
+      if (checkToken(data[0].toString()) &&
+          decrypt(data[1].toString()) == tag.id.toString()) {
+        await FlutterNfcKit.writeNDEFRecords([
+          ndef.UriRecord(content: user.toToken()),
+          ndef.UriRecord(content: tag.id.toString())
+        ]);
+        await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
+        await Future.delayed(const Duration(milliseconds: 500));
+        await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
+        await Future.delayed(const Duration(milliseconds: 500));
+        await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
+      } else {
+        await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+      }
+    } catch (e) {
+      await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+    }
+  }
+}
+
+Future<String?> readToken() async {
+  var tag = await FlutterNfcKit.poll(
+      timeout: const Duration(seconds: 10),
+      androidPlatformSound: false,
+      readIso14443A: true,
+      readIso14443B: true,
+      readIso15693: false,
+      readIso18092: false,
+      probeWebUSBMagic: false,
+      iosMultipleTagMessage: "Wykryto wiele kart",
+      iosAlertMessage: "Zbliż e-Legitymację");
+
+  if (!tag.ndefWritable!) {
+    await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+  } else {
+    await FlutterNfcKit.setIosAlertMessage("Pobieranie danych");
+    await Future.delayed(const Duration(milliseconds: 500));
+    try {
+      var data = await FlutterNfcKit.readNDEFRecords();
+      if (checkToken(data[0].toString()) &&
+          decrypt(data[1].toString()) == tag.id.toString()) {
+        await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
+        await Future.delayed(const Duration(milliseconds: 500));
+        await FlutterNfcKit.finish(iosAlertMessage: "Odczytano dane");
+        return data[0].toString();
+      } else {
+        await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+        return null;
+      }
+    } catch (e) {
+      await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+      return null;
+    }
+  }
+  return null;
+}
+
 Future<bool> authenticate() async {
   try {
     return await LocalAuthentication().authenticate(
@@ -160,6 +277,8 @@ Future logoutUser() async {
   }
 }
 
+Future setupUser() async {}
+
 Future changePIN() async {
   var token = await Cache().getToken();
   var user = User.fromToken(token);
@@ -208,45 +327,3 @@ Future changePIN() async {
     }
   }
 }
-
-bool checkToken(String token) {
-  var realData = decrypt(token).split("+");
-  if (realData[0] == "CRMNY") {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-Future writeToken(User user) async {
-  var tag = await FlutterNfcKit.poll(
-      timeout: const Duration(seconds: 10),
-      androidPlatformSound: false,
-      readIso14443A: true,
-      readIso14443B: true,
-      readIso15693: false,
-      readIso18092: false,
-      probeWebUSBMagic: false,
-      iosMultipleTagMessage: "Wykryto wiele kart",
-      iosAlertMessage: "Zbliż e-Legitymację");
-
-  if (!tag.ndefWritable!) {
-    await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
-  } else {
-    await FlutterNfcKit.setIosAlertMessage("Pobieranie danych");
-    Future.delayed(const Duration(seconds: 1));
-    var data = await FlutterNfcKit.readNDEFRecords(cached: true);
-    if (checkToken(data[0].toString()) &&
-        decrypt(data[1].toString()) == tag.id.toString()) {
-      await FlutterNfcKit.writeNDEFRecords([
-        ndef.UriRecord(content: user.toToken()),
-        ndef.UriRecord(content: tag.id.toString())
-      ]);
-      await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
-    } else {
-      await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
-    }
-  }
-}
-
-Future setupUser() async {}

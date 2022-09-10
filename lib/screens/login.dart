@@ -134,19 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (availability == NFCAvailability.not_supported) {
                     showErrorAlert('Błąd NFC', 'Brak modułu NFC');
                   } else {
-                    var tag = await FlutterNfcKit.poll(
-                        timeout: const Duration(seconds: 10),
-                        androidPlatformSound: false,
-                        readIso14443A: true,
-                        readIso14443B: true,
-                        readIso15693: false,
-                        readIso18092: false,
-                        probeWebUSBMagic: false,
-                        iosMultipleTagMessage: "Wykryto wiele kart",
-                        iosAlertMessage: "Zbliż e-Legitymację");
-                    await FlutterNfcKit.finish(
-                        iosAlertMessage: "Odczytano dane",
-                        iosErrorMessage: "Niepoprawna e-Legitymacja");
+                    await writeToken(User.fromToken(token));
                   }
                 },
                 child: const Icon(
