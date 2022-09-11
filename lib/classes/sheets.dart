@@ -5,6 +5,7 @@ import 'package:ceremony/classes/user.dart';
 import 'package:ceremony/classes/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -407,12 +408,13 @@ class Stamp extends StatefulWidget {
 
 class _StampState extends State<Stamp> {
   String stamp = "";
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
     var refreshedStamp = "";
-    Timer.periodic(
+    _timer = Timer.periodic(
       const Duration(milliseconds: 10),
       (timer) async {
         refreshedStamp = await TimeNow().getStamp();
@@ -426,11 +428,258 @@ class _StampState extends State<Stamp> {
   }
 
   @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Text(
       "Stan na dzień:   $stamp",
       textAlign: TextAlign.center,
       style: Theme.of(context).textTheme.bodyMedium,
+    );
+  }
+}
+
+class NFCScanner extends StatefulWidget {
+  final String title;
+  const NFCScanner({required this.title, Key? key}) : super(key: key);
+
+  @override
+  // ignore: no_logic_in_create_state
+  State<NFCScanner> createState() => _NFCScannerState(title);
+}
+
+class _NFCScannerState extends State<NFCScanner> {
+  String title;
+  late Timer _timer;
+  bool inSession = false;
+  bool reading = false;
+  bool success = false;
+  bool failed = false;
+  String message = "Szukam";
+  _NFCScannerState(this.title);
+
+  Future<String?> read() async {
+    var tag = await FlutterNfcKit.poll(
+        timeout: const Duration(seconds: 10),
+        androidPlatformSound: false,
+        readIso14443A: true,
+        readIso14443B: true,
+        readIso15693: false,
+        readIso18092: false,
+        probeWebUSBMagic: false,
+        iosMultipleTagMessage: "Wykryto wiele kart",
+        iosAlertMessage: "Zbliż e-Legitymację");
+
+    if (tag.ndefWritable == false) {
+      setState(() {
+        failed = true;
+        message = "Niepoprawny format";
+      });
+
+      await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny format");
+    } else {
+      setState(() {
+        reading = true;
+        message = "Pobieranie danych";
+      });
+
+      await FlutterNfcKit.setIosAlertMessage("Pobieranie danych");
+      await Future.delayed(const Duration(milliseconds: 500));
+      try {
+        var data = await FlutterNfcKit.readNDEFRecords(cached: false);
+        var identity = data[0].toString().split("/check/")[1];
+        var token = data[0].toString().split("/check/")[0].split("uri=")[1];
+
+        setState(() {
+          reading = true;
+          message = "Szyfrowanie";
+        });
+
+        await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
+        await Future.delayed(const Duration(milliseconds: 500));
+        if (tag.id.toString() == decrypt(identity) && checkToken(token)) {
+          setState(() {
+            success = true;
+            message = "Odczytano dane";
+          });
+
+          await FlutterNfcKit.finish(iosAlertMessage: "Odczytano dane");
+          return token;
+        } else {
+          setState(() {
+            failed = true;
+            message = "Niepoprawny dokument";
+          });
+
+          await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+          return null;
+        }
+      } catch (e) {
+        setState(() {
+          failed = true;
+          message = "Błąd odczytu";
+        });
+
+        await FlutterNfcKit.finish(iosErrorMessage: "Błąd odczytu");
+        return null;
+      }
+    }
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    int count = 0;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      setState(() {
+        count++;
+      });
+
+      if (inSession && !reading && !success && !failed) {
+        if (count % 4 != 0) {
+          message += ".";
+        } else {
+          message = "Szukam";
+        }
+      } else if (reading) {
+        setState(() {
+          count = 0;
+        });
+        timer.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15), color: Colors.white),
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(),
+            ),
+            success
+                ? Icon(
+                    Iconsax.tick_square,
+                    size: 100,
+                    color: Colors.green.withOpacity(0.8),
+                  )
+                : failed
+                    ? Icon(
+                        Iconsax.close_square,
+                        size: 100,
+                        color: Colors.red.withOpacity(0.8),
+                      )
+                    : const Icon(
+                        Iconsax.mirroring_screen,
+                        size: 100,
+                        color: Colors.black54,
+                      ),
+            const SizedBox(
+              height: 30,
+            ),
+            reading
+                ? Text(
+                    "",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.lato(
+                      textStyle: const TextStyle(
+                        color: Colors.black26,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                    ),
+                  )
+                : Text(
+                    "Zbliż e-Legitymację",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.lato(
+                      textStyle: const TextStyle(
+                        color: Colors.black26,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+            const SizedBox(
+              height: 10,
+            ),
+            inSession
+                ? OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      fixedSize: const Size(200, 50),
+                      alignment: Alignment.center,
+                      elevation: 0,
+                      primary: Colors.white,
+                      side: const BorderSide(
+                        width: 3,
+                        color: Colors.white,
+                        style: BorderStyle.solid,
+                      ),
+                    ),
+                    onPressed: null,
+                    child: Center(
+                      child: Text(
+                        message,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.lato(
+                          textStyle: const TextStyle(
+                            color: Colors.black26,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      fixedSize: const Size(200, 50),
+                      alignment: Alignment.center,
+                      elevation: 0,
+                      primary: Colors.black26,
+                      side: const BorderSide(
+                        width: 3,
+                        color: Colors.black26,
+                        style: BorderStyle.solid,
+                      ),
+                    ),
+                    child: const Center(
+                      child: Text("SKANUJ"),
+                    ),
+                    onPressed: () async {
+                      setState(() {
+                        inSession = true;
+                      });
+                      var readToken = await read();
+                      Get.back();
+                    },
+                  ),
+            Expanded(
+              child: Container(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -468,6 +717,27 @@ showDocumentScanned(String token) async {
             ),
           ),
         ],
+      ),
+    ),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15),
+    ),
+    elevation: 50,
+    backgroundColor: Colors.transparent,
+    isDismissible: true,
+    enableDrag: true,
+    isScrollControlled: false,
+    enterBottomSheetDuration: const Duration(milliseconds: 400),
+    exitBottomSheetDuration: const Duration(milliseconds: 400),
+  );
+}
+
+scanDocument() async {
+  Get.bottomSheet(
+    const Padding(
+      padding: EdgeInsets.only(top: 20, bottom: 10),
+      child: NFCScanner(
+        title: "Logowanie",
       ),
     ),
     shape: RoundedRectangleBorder(
