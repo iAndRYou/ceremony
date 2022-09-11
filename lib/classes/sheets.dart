@@ -293,28 +293,30 @@ class _LogoutPadState extends State<LogoutPad> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        leading: TextButton(
+        elevation: 0,
+        centerTitle: true,
+        leading: OutlinedButton(
           style: OutlinedButton.styleFrom(
             primary: Colors.white,
             side: const BorderSide(
               color: Colors.white,
             ),
             elevation: 0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(1500)),
           ),
           onPressed: () async {
-            Get.back(result: null);
+            Get.back();
           },
-          child: Text(
-            "Anuluj",
-            textAlign: TextAlign.left,
-            style: GoogleFonts.lato(
-              textStyle: TextStyle(
-                color: HexColor('1e4e82'),
-                fontWeight: FontWeight.w700,
-                fontSize: 13,
-              ),
-            ),
+          child: const Icon(
+            Iconsax.arrow_left_2,
+            size: 30,
+            color: Colors.black87,
           ),
+        ),
+        title: Text(
+          "Wyloguj",
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
       ),
       body: Padding(

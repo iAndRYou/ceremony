@@ -1,6 +1,27 @@
 import 'package:ceremony/classes/security.dart';
 import 'package:ntp/ntp.dart';
 
+enum UserType {
+  check,
+  acc,
+  name,
+  surname,
+  bdate,
+
+  pin,
+  id,
+  date,
+  exdate,
+  years,
+
+  parish,
+  deca,
+  location,
+  district,
+  council,
+  prize
+}
+
 class User {
   // user identification attributes
   String? acc; // AUTO type of account -> [x, x, x] title, job, details
@@ -52,6 +73,58 @@ class User {
     data +=
         '+$acc+$name+$surname+$bdate+$pin+$id+$date+$exdate+$years+$parish+$deca+$location+$district+$council+$prize';
     return encrypt(data);
+  }
+
+  update(UserType type, String value) {
+    switch (type) {
+      case UserType.acc:
+        acc = value;
+        break;
+      case UserType.name:
+        name = value;
+        break;
+      case UserType.surname:
+        surname = value;
+        break;
+      case UserType.bdate:
+        bdate = value;
+        break;
+      case UserType.pin:
+        pin = value;
+        break;
+      case UserType.id:
+        id = value;
+        break;
+      case UserType.date:
+        exdate = value;
+        break;
+      case UserType.exdate:
+        exdate = value;
+        break;
+      case UserType.years:
+        years = value;
+        break;
+      case UserType.parish:
+        parish = value;
+        break;
+      case UserType.deca:
+        deca = value;
+        break;
+      case UserType.location:
+        location = value;
+        break;
+      case UserType.district:
+        district = value;
+        break;
+      case UserType.council:
+        council = value;
+        break;
+      case UserType.prize:
+        prize = value;
+        break;
+      default:
+        throw Error();
+    }
   }
 
   String deanery() {

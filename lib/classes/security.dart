@@ -93,7 +93,7 @@ Future writeToken(User user) async {
   }
 }
 
-Future updateToken(User user) async {
+Future<String?> updateToken(String token, UserType type, String value) async {
   var tag = await FlutterNfcKit.poll(
       timeout: const Duration(seconds: 10),
       androidPlatformSound: false,
@@ -105,32 +105,54 @@ Future updateToken(User user) async {
       iosMultipleTagMessage: "Wykryto wiele kart",
       iosAlertMessage: "Zbliż e-Legitymację");
 
-  if (!tag.ndefWritable!) {
+  if (tag.ndefWritable == false) {
     await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
   } else {
     await FlutterNfcKit.setIosAlertMessage("Pobieranie danych");
     await Future.delayed(const Duration(milliseconds: 500));
     try {
-      var data = await FlutterNfcKit.readNDEFRecords();
-      var token = data[0].toString().split("/check/")[0];
+      var data = await FlutterNfcKit.readNDEFRecords(cached: false);
       var identity = data[0].toString().split("/check/")[1];
-      if (checkToken(token) && decrypt(identity) == tag.id.toString()) {
-        await FlutterNfcKit.writeNDEFRecords([
-          ndef.TextRecord(text: user.toToken()),
-          ndef.TextRecord(text: tag.id.toString()),
-        ]);
+      var readToken = data[0].toString().split("/check/")[0].split("uri=")[1];
+
+      var readUser = User.fromToken(readToken);
+      var checkUser = User.fromToken(token);
+
+      if (tag.id.toString() == decrypt(identity) &&
+          checkToken(readToken) &&
+          readUser.id == checkUser.id) {
+        await FlutterNfcKit.setIosAlertMessage("Odczytano dane");
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        readUser.update(type, value);
+        var message =
+            [readUser.toToken(), encrypt(tag.id.toString())].join("/check/");
+
         await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
         await Future.delayed(const Duration(milliseconds: 500));
-        await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
-        await Future.delayed(const Duration(milliseconds: 500));
-        await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
+        try {
+          await FlutterNfcKit.writeNDEFRecords([
+            ndef.UriRecord.fromString(message),
+          ]);
+
+          await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
+          await Future.delayed(const Duration(milliseconds: 500));
+          await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
+          return readUser.toToken();
+        } catch (e) {
+          await FlutterNfcKit.finish(iosErrorMessage: "Błąd zapisu");
+          return null;
+        }
       } else {
         await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+        return null;
       }
     } catch (e) {
-      await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+      await FlutterNfcKit.finish(iosErrorMessage: "Błąd odczytu");
+      return null;
     }
   }
+  return null;
 }
 
 Future<String?> readToken() async {
@@ -161,6 +183,7 @@ Future<String?> readToken() async {
         return token;
       } else {
         await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+        return null;
       }
     } catch (e) {
       await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
@@ -189,65 +212,38 @@ Future loginUser() async {
   var token = await Cache().getToken();
   var user = User.fromToken(token);
   var valid = await user.valid();
-  if (user.pin == '0') {
-    var newPin = await Get.to(
-      () => const ChangePinPad(
-        title: "Ustaw PIN",
-        prompt: "Ustaw PIN",
-      ),
-      transition: Transition.noTransition,
-      duration: const Duration(milliseconds: 600),
-    );
-    if (newPin != null && newPin.length == 4) {
-      await Future.delayed(const Duration(milliseconds: 200));
-      var changedPin = await Get.to(
-        () => const ChangePinPad(
-          title: "Powtórz PIN",
-          prompt: "Powtórz PIN",
-        ),
-        transition: Transition.noTransition,
-        duration: const Duration(milliseconds: 600),
-      );
-      if (changedPin == newPin) {
-        user.pin = changedPin;
-        Cache().setToken(user.toToken());
-        await Future.delayed(const Duration(milliseconds: 700));
-      }
-    } else {}
-  } else {
-    var ifSecureLogin = await Cache().ifSecureLogin();
-    if (ifSecureLogin) {
-      authenticate().then((authenticated) async {
-        if (authenticated) {
-          await Future.delayed(const Duration(milliseconds: 500));
-          Get.offAll(
-            () => Navigate(0, user, valid),
-            transition: Transition.fadeIn,
-            curve: Curves.ease,
-            duration: const Duration(milliseconds: 1000),
-          );
-        }
-      });
-    } else {
-      // ignore: unused_local_variable
-      var enteredPin = await Get.to(
-        () => const PinPad(),
-        transition: Transition.fadeIn,
-        duration: const Duration(milliseconds: 600),
-      );
-      if (enteredPin == user.pin) {
-        await Future.delayed(const Duration(milliseconds: 700));
+
+  var ifSecureLogin = await Cache().ifSecureLogin();
+  if (ifSecureLogin) {
+    authenticate().then((authenticated) async {
+      if (authenticated) {
+        await Future.delayed(const Duration(milliseconds: 500));
         Get.offAll(
           () => Navigate(0, user, valid),
           transition: Transition.fadeIn,
           curve: Curves.ease,
           duration: const Duration(milliseconds: 1000),
         );
-      } else {
-        if (enteredPin != null) {
-          await Future.delayed(const Duration(milliseconds: 700));
-          showErrorAlert("Błędny PIN", "Spróbuj ponownie");
-        }
+      }
+    });
+  } else {
+    var enteredPin = await Get.to(
+      () => const PinPad(),
+      transition: Transition.fadeIn,
+      duration: const Duration(milliseconds: 600),
+    );
+    if (enteredPin == user.pin) {
+      await Future.delayed(const Duration(milliseconds: 700));
+      Get.offAll(
+        () => Navigate(0, user, valid),
+        transition: Transition.fadeIn,
+        curve: Curves.ease,
+        duration: const Duration(milliseconds: 1000),
+      );
+    } else {
+      if (enteredPin != null) {
+        await Future.delayed(const Duration(milliseconds: 700));
+        showErrorAlert("Błędny PIN", "Spróbuj ponownie");
       }
     }
   }
@@ -263,6 +259,7 @@ Future logoutUser() async {
     duration: const Duration(milliseconds: 600),
   );
   if (enteredPin == user.pin) {
+    await Cache().deleteToken();
     Get.offAll(
       () => const LoginPage(),
       transition: Transition.fadeIn,
@@ -277,7 +274,91 @@ Future logoutUser() async {
   }
 }
 
-Future setupUser() async {}
+Future setupUser() async {
+  var firstScanToken = await readToken();
+  if (firstScanToken != null) {
+    var user = User.fromToken(firstScanToken);
+    await Future.delayed(const Duration(milliseconds: 2800));
+    if (user.pin == '0') {
+      var newPin = await Get.to(
+        () => const ChangePinPad(
+          title: "Ustaw PIN",
+          prompt: "Ustaw PIN",
+        ),
+        transition: Transition.noTransition,
+        duration: const Duration(milliseconds: 600),
+      );
+      if (newPin != null && newPin.length == 4) {
+        await Future.delayed(const Duration(milliseconds: 200));
+        var changedPin = await Get.to(
+          () => const ChangePinPad(
+            title: "Powtórz PIN",
+            prompt: "Powtórz PIN",
+          ),
+          transition: Transition.noTransition,
+          duration: const Duration(milliseconds: 600),
+        );
+        if (changedPin != null && changedPin == newPin) {
+          user.pin = newPin;
+          var updatedToken =
+              await updateToken(firstScanToken, UserType.pin, newPin);
+          await Future.delayed(const Duration(milliseconds: 2800));
+          if (updatedToken != null) {
+            user = User.fromToken(updatedToken);
+            var enteredPin = await Get.to(
+              () => const PinPad(),
+              transition: Transition.fadeIn,
+              duration: const Duration(milliseconds: 600),
+            );
+            if (enteredPin == user.pin) {
+              var valid = await user.valid();
+              Cache().setToken(user.toToken());
+              await Future.delayed(const Duration(milliseconds: 700));
+              Get.offAll(
+                () => Navigate(0, user, valid),
+                transition: Transition.fadeIn,
+                curve: Curves.ease,
+                duration: const Duration(milliseconds: 1000),
+              );
+            } else {
+              if (enteredPin != null) {
+                await Future.delayed(const Duration(milliseconds: 700));
+                showErrorAlert("Błędny PIN", "Spróbuj ponownie");
+              } else {}
+            }
+          } else {
+            await Future.delayed(const Duration(milliseconds: 700));
+            showErrorAlert("Błąd logowania", "Spróbuj ponownie");
+          }
+        } else {}
+      } else {}
+    } else {
+      var enteredPin = await Get.to(
+        () => const PinPad(),
+        transition: Transition.fadeIn,
+        duration: const Duration(milliseconds: 600),
+      );
+      if (enteredPin == user.pin) {
+        var valid = await user.valid();
+        Cache().setToken(user.toToken());
+        await Future.delayed(const Duration(milliseconds: 700));
+        Get.offAll(
+          () => Navigate(0, user, valid),
+          transition: Transition.noTransition,
+          duration: const Duration(milliseconds: 600),
+        );
+      } else {
+        if (enteredPin != null) {
+          await Future.delayed(const Duration(milliseconds: 700));
+          showErrorAlert("Błędny PIN", "Spróbuj ponownie");
+        }
+      }
+    }
+  } else {
+    await Future.delayed(const Duration(milliseconds: 700));
+    showErrorAlert("Błąd logowania", "Spróbuj ponownie");
+  }
+}
 
 Future changePIN() async {
   var token = await Cache().getToken();
@@ -310,9 +391,15 @@ Future changePIN() async {
       );
       if (changedPin == newPin) {
         user.pin = changedPin;
-        Cache().setToken(user.toToken());
-        await Future.delayed(const Duration(milliseconds: 700));
-        showCompleteAlert("Zmieniono PIN", "Poprawnie zmieniono dane");
+        var newToken = await updateToken(token, UserType.pin, changedPin);
+        if (newToken != null) {
+          Cache().setToken(newToken);
+          await Future.delayed(const Duration(milliseconds: 2800));
+          showCompleteAlert("Zmieniono PIN", "Poprawnie zmieniono dane");
+        } else {
+          await Future.delayed(const Duration(milliseconds: 2800));
+          showErrorAlert("Błąd zapisywania", "Spróbuj ponownie");
+        }
       } else {
         if (changedPin != null) {
           await Future.delayed(const Duration(milliseconds: 700));
