@@ -51,3 +51,4 @@ flutter:
   assets:
     - lib/assets/ddsl.png
     - lib/assets/cer.svg
+    - lib/assets/nfc.svg

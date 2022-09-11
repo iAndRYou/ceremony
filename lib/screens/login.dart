@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/security.dart';
@@ -119,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
               ),
-              const SizedBox(height: 80),
+              const SizedBox(height: 70),
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   primary: Colors.white,
@@ -137,9 +139,14 @@ class _LoginPageState extends State<LoginPage> {
                   } else if (availability == NFCAvailability.disabled) {
                     showErrorAlert('Błąd NFC', 'NFC wyłączone');
                   } else {
-                    var gotToken = await readToken();
-                    if (gotToken != null) {
-                      await showDocumentScanned(gotToken);
+                    if (Platform.isAndroid) {
+                      await scanDocument();
+                    }
+                    if (Platform.isIOS) {
+                      var gotToken = await readToken();
+                      if (gotToken != null) {
+                        await showDocumentScanned(gotToken);
+                      }
                     }
                   }
                 },
@@ -157,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                         textStyle: const TextStyle(
                           color: Colors.black26,
                           fontWeight: FontWeight.w700,
-                          fontSize: 15,
+                          fontSize: 10,
                         ),
                       ),
                     ),

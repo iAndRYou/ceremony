@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   goHome() async {
     await Future.delayed(const Duration(milliseconds: 1000));
-    Get.to(
+    Get.offAll(
       () => const LoginPage(),
       transition: Transition.fadeIn,
       curve: Curves.ease,

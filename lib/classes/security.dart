@@ -168,7 +168,7 @@ Future<String?> readToken() async {
       iosAlertMessage: "Zbliż e-Legitymację");
 
   if (tag.ndefWritable == false) {
-    await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+    await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny format");
   } else {
     await FlutterNfcKit.setIosAlertMessage("Pobieranie danych");
     await Future.delayed(const Duration(milliseconds: 500));
@@ -186,7 +186,7 @@ Future<String?> readToken() async {
         return null;
       }
     } catch (e) {
-      await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+      await FlutterNfcKit.finish(iosErrorMessage: "Błąd odczytu");
       return null;
     }
   }
