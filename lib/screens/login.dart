@@ -106,7 +106,6 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () async {
                   var hasToken = await Cache().hasToken();
                   if (hasToken) {
-                    await writeToken(User.fromToken(token));
                     await loginUser();
                   } else {
                     var availability = await FlutterNfcKit.nfcAvailability;

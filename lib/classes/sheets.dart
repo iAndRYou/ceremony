@@ -436,7 +436,7 @@ class _StampState extends State<Stamp> {
 showDocumentScanned(String token) async {
   var user = User.fromToken(token);
   var valid = await user.valid();
-  await Future.delayed(const Duration(seconds: 3));
+  await Future.delayed(const Duration(milliseconds: 2800));
   Get.bottomSheet(
     Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -451,6 +451,20 @@ showDocumentScanned(String token) async {
             ),
           ),
           Document(user, valid),
+          const SizedBox(
+            height: 15,
+          ),
+          Text(
+            "Zobacz więcej",
+            textAlign: TextAlign.center,
+            style: GoogleFonts.lato(
+              textStyle: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
+            ),
+          ),
         ],
       ),
     ),
