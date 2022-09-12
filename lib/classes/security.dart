@@ -81,9 +81,9 @@ Future writeToken(User user) async {
     var message = [user.toToken(), encrypt(tag.id.toString())].join("/check/");
     try {
       await FlutterNfcKit.writeNDEFRecords([
-        ndef.UriRecord.fromString(message),
+        ndef.TextRecord(text: message, encoding: ndef.TextEncoding.UTF8),
       ]);
-
+      print("written");
       await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
       await Future.delayed(const Duration(milliseconds: 500));
       await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
@@ -134,7 +134,7 @@ Future<String?> updateToken(String token, UserType type, String value) async {
           await FlutterNfcKit.writeNDEFRecords([
             ndef.TextRecord(text: message, encoding: ndef.TextEncoding.UTF8),
           ]);
-          print("written");
+          print("updated");
           await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
           await Future.delayed(const Duration(milliseconds: 500));
           await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
