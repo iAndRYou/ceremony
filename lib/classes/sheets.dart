@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:ceremony/classes/security.dart';
 import 'package:ceremony/classes/user.dart';
@@ -460,6 +461,7 @@ class _NFCScannerState extends State<NFCScanner> {
   bool success = false;
   bool failed = false;
   String message = "Szukam";
+  late String tokenScanned;
   _NFCScannerState(this.title);
 
   Future<String?> read() async {
@@ -488,7 +490,7 @@ class _NFCScannerState extends State<NFCScanner> {
       });
 
       await FlutterNfcKit.setIosAlertMessage("Pobieranie danych");
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future.delayed(const Duration(milliseconds: 200));
       try {
         var data = await FlutterNfcKit.readNDEFRecords(cached: false);
         var identity = data[0].toString().split("/check/")[1];
@@ -500,11 +502,12 @@ class _NFCScannerState extends State<NFCScanner> {
         });
 
         await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
-        await Future.delayed(const Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 200));
         if (tag.id.toString() == decrypt(identity) && checkToken(token)) {
           setState(() {
             success = true;
             message = "Odczytano dane";
+            tokenScanned = token;
           });
 
           await FlutterNfcKit.finish(iosAlertMessage: "Odczytano dane");
@@ -670,8 +673,12 @@ class _NFCScannerState extends State<NFCScanner> {
                       setState(() {
                         inSession = true;
                       });
-                      var readToken = await read();
+                      await read();
+                      await Future.delayed(const Duration(milliseconds: 200));
                       Get.back();
+                      if (tokenScanned.length > 10) {
+                        await showDocumentScanned(tokenScanned);
+                      }
                     },
                   ),
             Expanded(
@@ -687,7 +694,11 @@ class _NFCScannerState extends State<NFCScanner> {
 showDocumentScanned(String token) async {
   var user = User.fromToken(token);
   var valid = await user.valid();
-  await Future.delayed(const Duration(milliseconds: 2800));
+  if (Platform.isIOS) {
+    await Future.delayed(const Duration(milliseconds: 2800));
+  } else {
+    await Future.delayed(const Duration(milliseconds: 200));
+  }
   Get.bottomSheet(
     Padding(
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),

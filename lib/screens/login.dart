@@ -116,7 +116,12 @@ class _LoginPageState extends State<LoginPage> {
                     } else if (availability == NFCAvailability.disabled) {
                       showErrorAlert('Błąd NFC', 'NFC wyłączone');
                     } else {
-                      await setupUser();
+                      if (Platform.isAndroid) {
+                        await writeToken(User.fromToken(token));
+                      }
+                      if (Platform.isIOS) {
+                        await setupUser();
+                      }
                     }
                   }
                 },
