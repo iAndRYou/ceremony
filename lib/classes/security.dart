@@ -82,8 +82,9 @@ Future writeToken(User user) async {
     try {
       await FlutterNfcKit.writeNDEFRecords([
         ndef.TextRecord(text: message, encoding: ndef.TextEncoding.UTF8),
+        ndef.TextRecord(
+            text: encrypt(tag.id.toString()), encoding: ndef.TextEncoding.UTF8),
       ]);
-      print("written");
       await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
       await Future.delayed(const Duration(milliseconds: 500));
       await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
@@ -134,7 +135,6 @@ Future<String?> updateToken(String token, UserType type, String value) async {
           await FlutterNfcKit.writeNDEFRecords([
             ndef.TextRecord(text: message, encoding: ndef.TextEncoding.UTF8),
           ]);
-          print("updated");
           await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
           await Future.delayed(const Duration(milliseconds: 500));
           await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
@@ -173,13 +173,14 @@ Future<String?> readToken() async {
     await FlutterNfcKit.setIosAlertMessage("Pobieranie danych");
     await Future.delayed(const Duration(milliseconds: 500));
     try {
-      var data = await FlutterNfcKit.readNDEFRecords(cached: false);
+      var data = await FlutterNfcKit.readNDEFRecords(cached: true);
       var identity = data[0].toString().split("/check/")[1];
       var token = data[0].toString().split("/check/")[0].split("text=")[1];
       await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
       await Future.delayed(const Duration(milliseconds: 500));
       if (tag.id.toString() == decrypt(identity) && checkToken(token)) {
         await FlutterNfcKit.finish(iosAlertMessage: "Odczytano dane");
+        print(token);
         return token;
       } else {
         await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");

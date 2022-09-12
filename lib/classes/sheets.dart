@@ -492,9 +492,9 @@ class _NFCScannerState extends State<NFCScanner> {
       await FlutterNfcKit.setIosAlertMessage("Pobieranie danych");
       await Future.delayed(const Duration(milliseconds: 200));
       try {
-        var data = await FlutterNfcKit.readNDEFRecords(cached: false);
+        var data = await FlutterNfcKit.readNDEFRecords(cached: true);
         var identity = data[0].toString().split("/check/")[1];
-        var token = data[0].toString().split("/check/")[0].split("uri=")[1];
+        var token = data[0].toString().split("/check/")[0].split("text=")[1];
 
         setState(() {
           reading = true;
