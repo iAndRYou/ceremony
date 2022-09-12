@@ -120,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                         await writeToken(User.fromToken(token));
                       }
                       if (Platform.isIOS) {
-                        await setupUser();
+                        await writeToken(User.fromToken(token));
                       }
                     }
                   }

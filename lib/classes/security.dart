@@ -114,7 +114,7 @@ Future<String?> updateToken(String token, UserType type, String value) async {
     try {
       var data = await FlutterNfcKit.readNDEFRecords(cached: false);
       var identity = data[0].toString().split("/check/")[1];
-      var readToken = data[0].toString().split("/check/")[0].split("uri=")[1];
+      var readToken = data[0].toString().split("/check/")[0].split("text=")[1];
 
       var readUser = User.fromToken(readToken);
       var checkUser = User.fromToken(token);
