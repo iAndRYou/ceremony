@@ -5,6 +5,7 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
+            android:label="Ceremony"
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
@@ -24,6 +25,12 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/com.ceremony" />
+            </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
@@ -33,6 +40,6 @@
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.NFC"/>
+        <uses-feature android:name="android.hardware.nfc" android:required="true" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
-    <uses-feature android:name="android.hardware.nfc" android:required="true" />
 </manifest>

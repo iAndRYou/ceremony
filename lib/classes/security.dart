@@ -81,8 +81,9 @@ Future writeToken(User user) async {
     var message = [user.toToken(), encrypt(tag.id.toString())].join("/check/");
     try {
       await FlutterNfcKit.writeNDEFRecords([
-        ndef.TextRecord(text: message, encoding: ndef.TextEncoding.UTF8),
-        ndef.TextRecord(text: "Hello", encoding: ndef.TextEncoding.UTF8),
+        ndef.TextRecord(
+            text: message, encoding: ndef.TextEncoding.UTF8, language: "en"),
+        ndef.MimeRecord(decodedType: "com.ceremony")
       ]);
       await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
       await Future.delayed(const Duration(milliseconds: 500));
@@ -132,10 +133,12 @@ Future<String?> updateToken(String token, UserType type, String value) async {
         await Future.delayed(const Duration(milliseconds: 500));
         try {
           await FlutterNfcKit.writeNDEFRecords([
-            ndef.TextRecord(text: message, encoding: ndef.TextEncoding.UTF8),
-            ndef.TextRecord(text: "Hello", encoding: ndef.TextEncoding.UTF8),
+            ndef.TextRecord(
+                text: message,
+                encoding: ndef.TextEncoding.UTF8,
+                language: "en"),
+            ndef.MimeRecord(decodedType: "com.ceremony")
           ]);
-          print("written");
           await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
           await Future.delayed(const Duration(milliseconds: 500));
           await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
