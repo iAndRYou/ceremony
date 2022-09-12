@@ -81,14 +81,16 @@ Future writeToken(User user) async {
     var message = [user.toToken(), encrypt(tag.id.toString())].join("/check/");
     try {
       await FlutterNfcKit.writeNDEFRecords([
-        ndef.UriRecord.fromString(message),
+        ndef.TextRecord(
+            encoding: ndef.TextEncoding.UTF8, text: message, language: "en")
       ]);
+      print("written");
 
       await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
       await Future.delayed(const Duration(milliseconds: 500));
       await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
     } catch (e) {
-      await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+      await FlutterNfcKit.finish(iosErrorMessage: "Błąd zapisu");
     }
   }
 }
@@ -113,7 +115,7 @@ Future<String?> updateToken(String token, UserType type, String value) async {
     try {
       var data = await FlutterNfcKit.readNDEFRecords(cached: false);
       var identity = data[0].toString().split("/check/")[1];
-      var readToken = data[0].toString().split("/check/")[0].split("uri=")[1];
+      var readToken = data[0].toString().split("/check/")[0].split("text=")[1];
 
       var readUser = User.fromToken(readToken);
       var checkUser = User.fromToken(token);
@@ -134,7 +136,7 @@ Future<String?> updateToken(String token, UserType type, String value) async {
           await FlutterNfcKit.writeNDEFRecords([
             ndef.TextRecord(text: message, encoding: ndef.TextEncoding.UTF8),
           ]);
-          print("written");
+          print("updated");
           await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
           await Future.delayed(const Duration(milliseconds: 500));
           await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
@@ -173,7 +175,7 @@ Future<String?> readToken() async {
     await FlutterNfcKit.setIosAlertMessage("Pobieranie danych");
     await Future.delayed(const Duration(milliseconds: 500));
     try {
-      var data = await FlutterNfcKit.readNDEFRecords(cached: false);
+      var data = await FlutterNfcKit.readNDEFRecords(cached: true);
       var identity = data[0].toString().split("/check/")[1];
       var token = data[0].toString().split("/check/")[0].split("text=")[1];
       await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
