@@ -135,6 +135,7 @@ Future<String?> updateToken(String token, UserType type, String value) async {
             ndef.TextRecord(text: message, encoding: ndef.TextEncoding.UTF8),
             ndef.TextRecord(text: "Hello", encoding: ndef.TextEncoding.UTF8),
           ]);
+          print("written");
           await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
           await Future.delayed(const Duration(milliseconds: 500));
           await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
