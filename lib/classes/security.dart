@@ -82,14 +82,13 @@ Future writeToken(User user) async {
     try {
       await FlutterNfcKit.writeNDEFRecords([
         ndef.TextRecord(text: message, encoding: ndef.TextEncoding.UTF8),
-        ndef.TextRecord(
-            text: encrypt(tag.id.toString()), encoding: ndef.TextEncoding.UTF8),
+        ndef.TextRecord(text: "Hello", encoding: ndef.TextEncoding.UTF8),
       ]);
       await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
       await Future.delayed(const Duration(milliseconds: 500));
       await FlutterNfcKit.finish(iosAlertMessage: "Zapisano dane");
     } catch (e) {
-      await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
+      await FlutterNfcKit.finish(iosErrorMessage: "Błąd zapisu");
     }
   }
 }
@@ -134,6 +133,7 @@ Future<String?> updateToken(String token, UserType type, String value) async {
         try {
           await FlutterNfcKit.writeNDEFRecords([
             ndef.TextRecord(text: message, encoding: ndef.TextEncoding.UTF8),
+            ndef.TextRecord(text: "Hello", encoding: ndef.TextEncoding.UTF8),
           ]);
           await FlutterNfcKit.setIosAlertMessage("Zapisywanie");
           await Future.delayed(const Duration(milliseconds: 500));
@@ -180,7 +180,6 @@ Future<String?> readToken() async {
       await Future.delayed(const Duration(milliseconds: 500));
       if (tag.id.toString() == decrypt(identity) && checkToken(token)) {
         await FlutterNfcKit.finish(iosAlertMessage: "Odczytano dane");
-        print(token);
         return token;
       } else {
         await FlutterNfcKit.finish(iosErrorMessage: "Niepoprawny dokument");
