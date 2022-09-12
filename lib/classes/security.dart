@@ -175,7 +175,7 @@ Future<String?> readToken() async {
     try {
       var data = await FlutterNfcKit.readNDEFRecords(cached: false);
       var identity = data[0].toString().split("/check/")[1];
-      var token = data[0].toString().split("/check/")[0].split("uri=")[1];
+      var token = data[0].toString().split("/check/")[0].split("text=")[1];
       await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
       await Future.delayed(const Duration(milliseconds: 500));
       if (tag.id.toString() == decrypt(identity) && checkToken(token)) {
