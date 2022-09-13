@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/security.dart';
@@ -120,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                         await writeToken(User.fromToken(token));
                       }
                       if (Platform.isIOS) {
-                        await writeToken(User.fromToken(token));
+                        await setupUser();
                       }
                     }
                   }

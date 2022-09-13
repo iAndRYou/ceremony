@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/screens/login.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,33 +12,16 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with WidgetsBindingObserver {
+class _SplashScreenState extends State<SplashScreen> {
   bool animate = false;
   @override
-  @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    goLogin();
     super.initState();
   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (Platform.isIOS && state == AppLifecycleState.resumed) {
-      goLogin();
-    } else if (Platform.isAndroid && state == AppLifecycleState.resumed) {
-      goLogin();
-    }
-  }
-
   goLogin() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 700));
     Get.offAll(
       () => const LoginPage(),
       transition: Transition.fadeIn,
