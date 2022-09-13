@@ -65,4 +65,22 @@ class Cache {
       return false;
     }
   }
+
+  Future androidPageSet(String page) async {
+    await _userData.write(key: 'page', value: page);
+  }
+
+  Future androidDataSet(String data) async {
+    await _userData.write(key: 'data', value: data);
+  }
+
+  Future<String> androidPageGet() async {
+    var page = await _userData.read(key: 'page');
+    return page!;
+  }
+
+  Future<String> androidDataGet() async {
+    var data = await _userData.read(key: 'data');
+    return data!;
+  }
 }

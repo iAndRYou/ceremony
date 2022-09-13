@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/screens/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,22 +14,63 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with WidgetsBindingObserver {
   bool animate = false;
   @override
+  @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
-    goHome();
   }
 
-  goHome() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (Platform.isIOS && state == AppLifecycleState.resumed) {
+      goLogin();
+    } else if (Platform.isAndroid && state == AppLifecycleState.resumed) {
+      goLogin();
+    }
+  }
+
+  goLogin() async {
+    await Future.delayed(const Duration(milliseconds: 500));
     Get.offAll(
       () => const LoginPage(),
       transition: Transition.fadeIn,
       curve: Curves.ease,
       duration: const Duration(milliseconds: 1000),
     );
+  }
+
+  androidHandling() async {
+    var page = await Cache().androidPageGet();
+    switch (page) {
+      case "login":
+        await Future.delayed(const Duration(milliseconds: 500));
+        Get.offAll(
+          () => const LoginPage(),
+          transition: Transition.fadeIn,
+          curve: Curves.ease,
+          duration: const Duration(milliseconds: 1000),
+        );
+        break;
+      default:
+        await Future.delayed(const Duration(milliseconds: 500));
+        Get.offAll(
+          () => const LoginPage(),
+          transition: Transition.fadeIn,
+          curve: Curves.ease,
+          duration: const Duration(milliseconds: 1000),
+        );
+        break;
+    }
   }
 
   @override
