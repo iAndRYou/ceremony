@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/security.dart';
 import 'package:ceremony/classes/user.dart';
 import 'package:ceremony/classes/widgets.dart';
@@ -446,15 +447,18 @@ class _StampState extends State<Stamp> {
 
 class NFCScanner extends StatefulWidget {
   final String title;
-  const NFCScanner({required this.title, Key? key}) : super(key: key);
+  final String page;
+  const NFCScanner({required this.title, required this.page, Key? key})
+      : super(key: key);
 
   @override
   // ignore: no_logic_in_create_state
-  State<NFCScanner> createState() => _NFCScannerState(title);
+  State<NFCScanner> createState() => _NFCScannerState(title, page);
 }
 
 class _NFCScannerState extends State<NFCScanner> {
   String title;
+  String page;
   late Timer _timer;
   bool inSession = false;
   bool reading = false;
@@ -462,7 +466,7 @@ class _NFCScannerState extends State<NFCScanner> {
   bool failed = false;
   String message = "Szukam";
   late String tokenScanned;
-  _NFCScannerState(this.title);
+  _NFCScannerState(this.title, this.page);
 
   Future<String?> read() async {
     var tag = await FlutterNfcKit.poll(
@@ -504,6 +508,8 @@ class _NFCScannerState extends State<NFCScanner> {
         await FlutterNfcKit.setIosAlertMessage("Szyfrowanie");
         await Future.delayed(const Duration(milliseconds: 200));
         if (tag.id.toString() == decrypt(identity) && checkToken(token)) {
+          await Cache().androidDataSet(token);
+          await Cache().androidPageSet(page);
           setState(() {
             success = true;
             message = "Odczytano dane";
@@ -743,12 +749,13 @@ showDocumentScanned(String token) async {
   );
 }
 
-scanDocument() async {
+scanDocument(String where) async {
   Get.bottomSheet(
-    const Padding(
-      padding: EdgeInsets.only(top: 20, bottom: 10),
+    Padding(
+      padding: const EdgeInsets.only(top: 20, bottom: 10),
       child: NFCScanner(
         title: "Logowanie",
+        page: where,
       ),
     ),
     shape: RoundedRectangleBorder(

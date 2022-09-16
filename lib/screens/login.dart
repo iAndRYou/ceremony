@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                     showErrorAlert('Błąd NFC', 'NFC wyłączone');
                   } else {
                     if (Platform.isAndroid) {
-                      await scanDocument();
+                      await scanDocument("login");
                     }
                     if (Platform.isIOS) {
                       var gotToken = await readToken();

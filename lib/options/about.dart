@@ -1,8 +1,13 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+
+import '../classes/security.dart';
+import '../screens/login.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -11,7 +16,41 @@ class AboutPage extends StatefulWidget {
   State<AboutPage> createState() => _AboutPageState();
 }
 
-class _AboutPageState extends State<AboutPage> {
+class _AboutPageState extends State<AboutPage> with WidgetsBindingObserver {
+  late Timer _updateTimer;
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+
+    _updateTimer.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (Platform.isIOS && state == AppLifecycleState.resumed) {
+      _updateTimer.cancel();
+    } else if (Platform.isAndroid && state == AppLifecycleState.resumed) {
+      _updateTimer.cancel();
+    }
+    if (Platform.isIOS && state == AppLifecycleState.paused) {
+      _updateTimer = Timer(const Duration(seconds: 5), () => secureBack());
+    } else if (Platform.isAndroid && state == AppLifecycleState.paused) {
+      _updateTimer = Timer(const Duration(seconds: 5), () => secureBack());
+    }
+  }
+
+  secureBack() async {
+    Get.offAll(
+      () => const LoginPage(),
+      transition: Transition.noTransition,
+      curve: Curves.ease,
+      duration: const Duration(milliseconds: 700),
+    );
+    Future.delayed(const Duration(milliseconds: 500));
+    await loginUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return IntroductionScreen(
