@@ -1,4 +1,4 @@
-package com.ceremony.ceremony;
+package com.ceremony.app;
 
 import io.flutter.embedding.android.FlutterActivity;
 
