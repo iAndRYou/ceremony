@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-
-import '../classes/security.dart';
 import '../screens/login.dart';
 
 class AboutPage extends StatefulWidget {
@@ -48,7 +46,6 @@ class _AboutPageState extends State<AboutPage> with WidgetsBindingObserver {
       duration: const Duration(milliseconds: 700),
     );
     Future.delayed(const Duration(milliseconds: 500));
-    await loginUser();
   }
 
   @override

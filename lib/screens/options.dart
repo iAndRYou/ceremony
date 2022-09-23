@@ -51,7 +51,6 @@ class _OptionsPageState extends State<OptionsPage> with WidgetsBindingObserver {
       duration: const Duration(milliseconds: 700),
     );
     Future.delayed(const Duration(milliseconds: 500));
-    await loginUser();
   }
 
   @override

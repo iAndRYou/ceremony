@@ -4,7 +4,6 @@ import 'package:ceremony/classes/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import '../classes/security.dart';
 import '../screens/login.dart';
 
 class WhoIs extends StatefulWidget {
@@ -46,7 +45,6 @@ class _WhoIsState extends State<WhoIs> with WidgetsBindingObserver {
       duration: const Duration(milliseconds: 700),
     );
     Future.delayed(const Duration(milliseconds: 500));
-    await loginUser();
   }
 
   @override
