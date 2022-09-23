@@ -96,7 +96,7 @@ class _AboutPageState extends State<AboutPage> with WidgetsBindingObserver {
         PageViewModel(
           title: "Skanuj e-Legitymację",
           body:
-              "Dzięki aplikacji Ceremony możesz skanować każdą e-legitymację ceremoniarza, sprawdzać jej ważność i podstawowe dane na niej zapisane. Możesz zrobić to bez logowania się do aplikacji albo z poziomu menu opcji.",
+              "Dzięki aplikacji Ceremony możesz skanować każdą e-legitymację ceremoniarza, sprawdzać jej ważność i podstawowe dane na niej zapisane. Możesz zrobić to z poziomu ekranu logowania.",
           image: Center(
             child: Icon(
               Iconsax.mirroring_screen,
@@ -108,7 +108,7 @@ class _AboutPageState extends State<AboutPage> with WidgetsBindingObserver {
         PageViewModel(
           title: "e-Legitymacja",
           body:
-              "Zaloguj się, a dane twojej legitymacji oraz informacje o twojej posłudze zostaną zebrane w jednym miejscu - na twoim telefonie. Okazanie e-legitymacji w aplikacji jest równoprawne okazaniu fizycznego dokumentu. Tylko w aplikacji sprawdzisz, czy dokument jest ważny.",
+              "Zaloguj się, a dane twojej legitymacji oraz informacje o twojej posłudze zostaną zebrane w jednym miejscu - na twoim telefonie. Okazanie e-legitymacji w aplikacji jest równoprawne okazaniu fizycznego dokumentu. W aplikacji sprawdzisz, czy dokument jest ważny.",
           image: Center(
             child: Icon(
               Iconsax.personalcard,

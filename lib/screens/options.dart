@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:ceremony/classes/preferences.dart';
 import 'package:ceremony/classes/security.dart';
+import 'package:ceremony/classes/sheets.dart';
+import 'package:ceremony/classes/user.dart';
 import 'package:ceremony/options/about.dart';
 import 'package:ceremony/options/sec.dart';
 import 'package:ceremony/options/who.dart';
@@ -123,34 +126,6 @@ class _OptionsPageState extends State<OptionsPage> with WidgetsBindingObserver {
           ListTile(
             dense: true,
             title: Text(
-              "Pobierz dokument",
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            trailing: OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                primary: Colors.white,
-                side: const BorderSide(
-                  color: Colors.white,
-                ),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(1500)),
-              ),
-              onPressed: () {},
-              child: const Icon(
-                Iconsax.document_download,
-                size: 30,
-                color: Colors.black87,
-              ),
-            ),
-          ),
-          Divider(
-            height: 3,
-            color: Theme.of(context).dividerColor,
-          ),
-          ListTile(
-            dense: true,
-            title: Text(
               "Bezpieczeństwo",
               style: Theme.of(context).textTheme.headlineMedium,
             ),
@@ -182,7 +157,7 @@ class _OptionsPageState extends State<OptionsPage> with WidgetsBindingObserver {
           ListTile(
             dense: true,
             title: Text(
-              "Skanuj e-Legitymację",
+              "Aktualizuj dane",
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             trailing: OutlinedButton(
@@ -195,9 +170,30 @@ class _OptionsPageState extends State<OptionsPage> with WidgetsBindingObserver {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(1500)),
               ),
-              onPressed: () async {},
+              onPressed: () async {
+                if (Platform.isAndroid) {
+                  // TODO: Implement scan UI for Android
+                }
+                if (Platform.isIOS) {
+                  var cachedToken = await Cache().getToken();
+                  var gotToken = await readToken();
+                  if (gotToken != null) {
+                    var cachedUser = User.fromToken(cachedToken);
+                    var gotUser = User.fromToken(gotToken);
+                    if (cachedUser.id == gotUser.id) {
+                      await Cache().setToken(gotToken);
+                      await Future.delayed(const Duration(milliseconds: 2800));
+                      showCompleteAlert(
+                          "Zaktualizowano", "Zapisano dane Pomyślnie");
+                    } else {
+                      showErrorAlert(
+                          "Błąd zapisywania", "Niepoprawny dokument");
+                    }
+                  }
+                }
+              },
               child: const Icon(
-                Iconsax.mirroring_screen,
+                Iconsax.refresh,
                 size: 30,
                 color: Colors.black87,
               ),

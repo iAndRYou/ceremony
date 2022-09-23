@@ -417,7 +417,7 @@ class _StampState extends State<Stamp> {
     super.initState();
     var refreshedStamp = "";
     _timer = Timer.periodic(
-      const Duration(milliseconds: 10),
+      const Duration(seconds: 1),
       (timer) async {
         refreshedStamp = await TimeNow().getStamp();
         if (mounted) {
