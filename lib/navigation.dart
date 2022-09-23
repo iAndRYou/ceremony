@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:ceremony/classes/security.dart';
 import 'package:ceremony/classes/user.dart';
 import 'package:ceremony/screens/login.dart';
 import 'package:flutter/material.dart';
