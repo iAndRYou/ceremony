@@ -114,7 +114,6 @@ class _LoginPageState extends State<LoginPage> {
                   } else {
                     var availability = await FlutterNfcKit.nfcAvailability;
                     if (availability == NFCAvailability.not_supported) {
-                      await loginUser();
                       showErrorAlert('Błąd NFC', 'Brak modułu NFC');
                     } else if (availability == NFCAvailability.disabled) {
                       showErrorAlert('Błąd NFC', 'NFC wyłączone');
