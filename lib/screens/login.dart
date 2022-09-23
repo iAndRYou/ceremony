@@ -74,6 +74,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 40),
+              Expanded(
+                child: Container(),
+              ),
               Center(
                 child: Text(
                   welcome,
@@ -111,12 +114,13 @@ class _LoginPageState extends State<LoginPage> {
                   } else {
                     var availability = await FlutterNfcKit.nfcAvailability;
                     if (availability == NFCAvailability.not_supported) {
+                      await loginUser();
                       showErrorAlert('Błąd NFC', 'Brak modułu NFC');
                     } else if (availability == NFCAvailability.disabled) {
                       showErrorAlert('Błąd NFC', 'NFC wyłączone');
                     } else {
                       if (Platform.isAndroid) {
-                        await scanDocument("login");
+                        await loginUser();
                       }
                       if (Platform.isIOS) {
                         await setupUser();

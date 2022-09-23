@@ -213,8 +213,9 @@ Future<bool> authenticate() async {
 }
 
 Future loginUser() async {
-  var token = await Cache().getToken();
-  var user = User.fromToken(token);
+  //var token = await Cache().getToken();
+  var user = User.fromToken(encrypt(
+      'CRMNY+C 0 0+Jan+Kowalski+07.05.2006+0000+2023-05+14.05.2023+31.12.2023+1+św. Jana Kantego+4+Kraków+6+0 0 0+0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022+0'));
   var valid = await user.valid();
 
   var ifSecureLogin = await Cache().ifSecureLogin();
