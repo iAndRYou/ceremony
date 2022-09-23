@@ -65,7 +65,6 @@ class _SecurityOptionsState extends State<SecurityOptions>
       duration: const Duration(milliseconds: 700),
     );
     Future.delayed(const Duration(milliseconds: 500));
-    await loginUser();
   }
 
   @override

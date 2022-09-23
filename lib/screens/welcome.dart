@@ -87,7 +87,7 @@ class _WelcomePageState extends State<WelcomePage> {
         PageViewModel(
           title: "Przedłużaj ważność",
           body:
-              "Weź udział w conajmniej jednym zjeździe dla ceremoniarzy organizowanym przez Duszpasterstwo Służby Liturgicznej w ciągu roku, zeskanuj kod i przedłuż ważność e-legitymacji o rok.",
+              "Weź udział w conajmniej jednym zjeździe dla ceremoniarzy organizowanym przez Duszpasterstwo Służby Liturgicznej w ciągu roku i przedłuż ważność e-legitymacji o rok.",
           image: Center(
             child: Icon(
               Iconsax.calendar_tick,

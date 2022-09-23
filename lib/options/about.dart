@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-
-import '../classes/security.dart';
 import '../screens/login.dart';
 
 class AboutPage extends StatefulWidget {
@@ -48,7 +46,6 @@ class _AboutPageState extends State<AboutPage> with WidgetsBindingObserver {
       duration: const Duration(milliseconds: 700),
     );
     Future.delayed(const Duration(milliseconds: 500));
-    await loginUser();
   }
 
   @override
@@ -120,7 +117,7 @@ class _AboutPageState extends State<AboutPage> with WidgetsBindingObserver {
         PageViewModel(
           title: "Przedłużaj ważność",
           body:
-              "Weź udział w conajmniej jednym zjeździe dla ceremoniarzy organizowanym przez Duszpasterstwo Służby Liturgicznej w ciągu roku, zeskanuj kod i przedłuż ważność e-legitymacji o rok.",
+              "Weź udział w conajmniej jednym zjeździe dla ceremoniarzy organizowanym przez Duszpasterstwo Służby Liturgicznej w ciągu roku i przedłuż ważność e-legitymacji o rok.",
           image: Center(
             child: Icon(
               Iconsax.calendar_tick,

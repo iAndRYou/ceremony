@@ -70,10 +70,7 @@ class _NavigateState extends State<Navigate> with WidgetsBindingObserver {
       () => const LoginPage(),
       transition: Transition.noTransition,
       curve: Curves.ease,
-      duration: const Duration(milliseconds: 700),
     );
-    Future.delayed(const Duration(milliseconds: 500));
-    await loginUser();
   }
 
   @override

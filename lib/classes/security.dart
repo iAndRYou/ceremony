@@ -221,7 +221,7 @@ Future loginUser() async {
   if (ifSecureLogin) {
     authenticate().then((authenticated) async {
       if (authenticated) {
-        await Future.delayed(const Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 700));
         Get.offAll(
           () => Navigate(0, user, valid),
           transition: Transition.fadeIn,

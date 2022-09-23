@@ -51,7 +51,6 @@ class _OptionsPageState extends State<OptionsPage> with WidgetsBindingObserver {
       duration: const Duration(milliseconds: 700),
     );
     Future.delayed(const Duration(milliseconds: 500));
-    await loginUser();
   }
 
   @override
@@ -184,7 +183,7 @@ class _OptionsPageState extends State<OptionsPage> with WidgetsBindingObserver {
                       await Cache().setToken(gotToken);
                       await Future.delayed(const Duration(milliseconds: 2800));
                       showCompleteAlert(
-                          "Zaktualizowano", "Zapisano dane Pomyślnie");
+                          "Zaktualizowano", "Zapisano dane pomyślnie");
                     } else {
                       showErrorAlert(
                           "Błąd zapisywania", "Niepoprawny dokument");
