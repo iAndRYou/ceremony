@@ -703,7 +703,7 @@ class _DocumentState extends State<Document> {
                             ),
                             Positioned(
                               left: 95,
-                              top: 90,
+                              top: 95,
                               width: 75,
                               height: 60,
                               child: Container(
@@ -715,7 +715,7 @@ class _DocumentState extends State<Document> {
                                   children: [
                                     Positioned(
                                       top: 0,
-                                      right: 70,
+                                      right: user.dotCode()[0] * 7,
                                       child: Container(
                                         height: 5,
                                         width: 5,
@@ -729,7 +729,7 @@ class _DocumentState extends State<Document> {
                                     ),
                                     Positioned(
                                       top: 10,
-                                      right: 70,
+                                      right: user.dotCode()[1] * 7,
                                       child: Container(
                                         height: 5,
                                         width: 5,
@@ -743,7 +743,7 @@ class _DocumentState extends State<Document> {
                                     ),
                                     Positioned(
                                       top: 20,
-                                      right: 70,
+                                      right: user.dotCode()[2] * 7,
                                       child: Container(
                                         height: 5,
                                         width: 5,
@@ -757,7 +757,7 @@ class _DocumentState extends State<Document> {
                                     ),
                                     Positioned(
                                       top: 30,
-                                      right: 70,
+                                      right: user.dotCode()[3] * 7,
                                       child: Container(
                                         height: 5,
                                         width: 5,
@@ -771,7 +771,7 @@ class _DocumentState extends State<Document> {
                                     ),
                                     Positioned(
                                       top: 40,
-                                      right: 70,
+                                      right: user.dotCode()[4] * 7,
                                       child: Container(
                                         height: 5,
                                         width: 5,
@@ -907,7 +907,7 @@ class _DocumentState extends State<Document> {
                     ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

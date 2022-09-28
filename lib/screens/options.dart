@@ -5,6 +5,7 @@ import 'package:ceremony/classes/security.dart';
 import 'package:ceremony/classes/sheets.dart';
 import 'package:ceremony/classes/user.dart';
 import 'package:ceremony/options/about.dart';
+import 'package:ceremony/options/help.dart';
 import 'package:ceremony/options/sec.dart';
 import 'package:ceremony/options/who.dart';
 import 'package:ceremony/screens/login.dart';
@@ -205,7 +206,7 @@ class _OptionsPageState extends State<OptionsPage> with WidgetsBindingObserver {
           ListTile(
             dense: true,
             title: Text(
-              "Przedłuż ważność",
+              "Zapisz dane",
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             trailing: OutlinedButton(
@@ -218,7 +219,10 @@ class _OptionsPageState extends State<OptionsPage> with WidgetsBindingObserver {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(1500)),
               ),
-              onPressed: () async {},
+              onPressed: () async {
+                writeToken(User.fromToken(encrypt(
+                    'CRMNY+C 0 0+Jan+Kowalski+07.05.2006+0+2023-005+14.05.2023+31.12.2023+1+św. Jana Kantego+4+Kraków+6+0 0 0+0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022 0#01.01.2022+0')));
+              },
               child: const Icon(
                 Iconsax.calendar_tick,
                 size: 30,
@@ -277,7 +281,12 @@ class _OptionsPageState extends State<OptionsPage> with WidgetsBindingObserver {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(1500)),
               ),
-              onPressed: () async {},
+              onPressed: () async {
+                Get.to(
+                  () => const HelpPage(title: "Wyloguj", subtitle: "Podaj PIN"),
+                  transition: Transition.cupertino,
+                );
+              },
               child: const Icon(
                 Iconsax.information,
                 size: 30,

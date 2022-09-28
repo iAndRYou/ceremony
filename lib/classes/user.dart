@@ -240,6 +240,19 @@ class User {
     }
   }
 
+  List<int> dotCode() {
+    var table = id!.split("-");
+    var data13 = int.parse(table[0]);
+    var data45 = int.parse(table[1]);
+    return [
+      data13 ~/ 1000 + data45 ~/ 100,
+      data13 ~/ 10 % 10,
+      data13 % 10,
+      (data45 ~/ 10) % 10,
+      data45 % 10
+    ];
+  }
+
   Future<bool> valid() async {
     var ex =
         exdate!.split(".")[2] + exdate!.split(".")[1] + exdate!.split(".")[0];
